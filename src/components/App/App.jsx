@@ -41,8 +41,8 @@ function App() {
       {/* <Route
         path="/"
         element={<Main />}
-      />
-      <Route
+      /> */}
+      {/* <Route
         path="*"
         element={<PageNotFound />}
       /> */}
