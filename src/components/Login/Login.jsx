@@ -1,54 +1,47 @@
-// import React, { useState } from "react";
+import React from "react";
+import logo from "../images/logo.svg"
+import { Link } from "react-router-dom";
 
-// function Login({ onLogin }) {
+function Login() {
 
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
+  return (
+    <section className="login">
+        <img className="form__logo" src={logo} alt="Логотип"></img>
+        <h2 className="form__title">Рады видеть!</h2>
+      <form className="form" >
+        <input
+          // id="email"
+        //   onChange={handleEmailChange}
+          type="email"
+          name="email"
+          autoComplete="email"
+          placeholder=""
+          className="form__input"
+          required
+        //   value={email || ""}
+        ></input>
+        <span id="email-error" className="form__error"/>
+        <input
+          // id="password"
+        //   onChange={handlePasswordChange}
+          autoComplete="new-password"
+          required
+          type="password"
+          name="password"
+          placeholder=""
+          className="form__input"
+        //   value={password || ""}
+        ></input>
+        <button type="submit" className="form__button" aria-label="Логин">
+            Войти
+        </button>
+      </form>
+      <div className="form_container">
+            <p className="form__text"></p>
+            <Link to="/signup" classname="form__link">Регистрация</Link>
+        </div>
+      </section>
+  );
+}
 
-//   function handleEmailChange(e){
-//     setEmail(e.target.value)
-//   }
-
-//   function handlePasswordChange(e){
-//     setPassword(e.target.value)
-//   }
-
-//   function handleSubmit(e) {
-//     e.preventDefault()
-
-//     onLogin({email, password})
-//   }
-
-//   return (
-//       <form className="auth__form" onSubmit={handleSubmit}>
-//       <h1 className="auth__title">Вход</h1>
-//         <input
-//           // id="email"
-//           onChange={handleEmailChange}
-//           type="email"
-//           name="email"
-//           autoComplete="email"
-//           placeholder="Email"
-//           className="auth__input"
-//           required
-//           value={email || ""}
-//         ></input>
-//         <input
-//           // id="password"
-//           onChange={handlePasswordChange}
-//           autoComplete="new-password"
-//           required
-//           type="password"
-//           name="password"
-//           placeholder="Пароль"
-//           className="auth__input"
-//           value={password || ""}
-//         ></input>
-//         <button type="submit" className="auth__button" aria-label="Логин">
-//           Войти
-//         </button>
-//       </form>
-//   );
-// }
-
-// export default Login;
+export default Login;

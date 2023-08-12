@@ -38,20 +38,19 @@ function App() {
         path="/sign-in"
         element={<Login />}
       />
-      {/* <Route
+      <Route
         path="/"
         element={<Main />}
-      /> */}
-      {/* <Route
+      />
+      <Route
         path="*"
         element={<PageNotFound />}
-      /> */}
+      />
       </Routes>
-
       <Footer />
 
     </div>
   );
-}
+};
 
 export default App;

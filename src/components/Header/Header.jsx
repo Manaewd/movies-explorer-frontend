@@ -1,96 +1,46 @@
-import React from "react";
-import logo from "../images/logo.svg";
+import React from 'react';
+import { Link, NavLink } from "react-router-dom";
+import logo from '../../components/images/logo.svg';
+import profile from '../../components/images/icon-profile.svg';
 import './Header.css';
 
-import { Link, Route, Routes } from "react-router-dom";
+function Header({ loggedIn }) {
+    const setNavLinkClass = ({ isActive }) =>
+    isActive ? "header__nav-link header__nav-link_active" : "header__nav-link";
 
-function Header({ onLogOut, emailHeader, isOpen, menuOpen }) {
-  return (
-    <>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <nav
-              className={` ${
-                isOpen ? "header__nav_mob-active" : "header__nav-mob"
-              }`}
-            >
-              <p className="header__email">{emailHeader}</p>
-              <Link
-                to="sign-in"
-                className="header__exit"
-                onClick={onLogOut}
-              >
-                Выйти
-              </Link>
-            </nav>
-          }
-        />
-      </Routes>
-      <header className="header">
-        <img className="header__logo" src={logo} alt="Логотип" />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <button
-                  className={`${
-                    isOpen
-                      ? "header__menu-closed"
-                      : "header__menu-open"
-                  }`}
-                  type="button"
-                  onClick={menuOpen}
-                />
-                <nav className="header__nav">
-                  <p className="header__email">{emailHeader}</p>
-                  <Link
-                    to="sign-in"
-                    className="header__exit"
-                    onClick={onLogOut}
-                  >
-                    Выйти
-                  </Link>
-                </nav>
-              </>
+    return (
+        <header className="header">
+            {!loggedIn &&
+                <>
+                    <img className="header__logo" src={logo} alt="Логотип" />
+                    <nav className="header__nav">
+                        <Link className="header__link" to="/signup" >Регистрация</Link>
+                        <Link className="header__link" to="/signin">Войти</Link>
+                    </nav>
+                </>
             }
-          />
-
-          <Route
-            path="/sign-in"
-            element={
-              <Link to="/sign-up" className="header__link">
-                Регистрация
-              </Link>
+            {loggedIn &&
+                <>
+                    <input type="checkbox" id="check" />
+                    <Link className="header__logo-link" to="/">
+                        <img className="header__logo" src={logo} alt="Логотип" />
+                    </Link>
+                    <div className="header__overlay" />
+                    <nav className="header__menu">
+                        <div className="header__links-container">
+                            <NavLink className={setNavLinkClass} to="/" id="home-link">Главная</NavLink>
+                            <NavLink className={setNavLinkClass} to="/movies">Фильмы</NavLink>
+                            <NavLink className={setNavLinkClass} to="/saved-movies">Сохранённые фильмы</NavLink>
+                        </div>
+                        <Link className="header__link_profile" to="/profile">
+                            <img className="header__link_profile-img" src={profile} alt="Аккаунт" />
+                            <p className="header__link_profile-text">Аккаунт</p>
+                        </Link>
+                    </nav>
+                </>
             }
-          />
-
-          <Route
-            path="/sign-up"
-            element={
-              <Link to="/sign-in" className="header__link">
-                Войти
-              </Link>
-            }
-          />
-
-          <Route
-            path="/"
-            element={
-              <nav className="header__nav">
-                <p className="header__email">{emailHeader}</p>
-                <Link to="sign-in" className="header__exit" onClick={onLogOut}>
-                  Выйти
-                </Link>
-              </nav>
-            }
-          />
-        </Routes>
-      </header>
-    </>
-  );
-}
+        </header>
+    );
+};
 
 export default Header;
