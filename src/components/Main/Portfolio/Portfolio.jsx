@@ -9,15 +9,15 @@ function Portfolio() {
                 <ul className='portfolio__list'>
                     <li className='portfolio__list-item'>
                         <Link className='portfolio__link' to='https://github.com/Manaewd'>Статичный сайт</Link>
-                        <p className="">↗</p>
+                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
                     </li>
                     <li className='portfolio__list-item'>
                         <Link className='portfolio__link' to='https://github.com/Manaewd'>Адаптивный сайт</Link>
-                        <p className="">↗</p>
+                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
                     </li>
                     <li className='portfolio__list-item'>
                         <Link className='portfolio__link' to='https://github.com/Manaewd'>Одностраничное приложение</Link>
-                        <p className="">↗</p>
+                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
                     </li>
                 </ul>
             </nav>

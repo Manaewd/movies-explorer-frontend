@@ -1,47 +1,33 @@
-import React from "react";
-import logo from "../images/logo.svg"
-import { Link } from "react-router-dom";
+import './Login.css';
+import Logo from '../images/logo.svg';
+import { Link } from 'react-router-dom';
 
-function Login() {
-
-  return (
-    <section className="login">
-        <img className="form__logo" src={logo} alt="Логотип"></img>
-        <h2 className="form__title">Рады видеть!</h2>
-      <form className="form" >
-        <input
-          // id="email"
-        //   onChange={handleEmailChange}
-          type="email"
-          name="email"
-          autoComplete="email"
-          placeholder=""
-          className="form__input"
-          required
-        //   value={email || ""}
-        ></input>
-        <span id="email-error" className="form__error"/>
-        <input
-          // id="password"
-        //   onChange={handlePasswordChange}
-          autoComplete="new-password"
-          required
-          type="password"
-          name="password"
-          placeholder=""
-          className="form__input"
-        //   value={password || ""}
-        ></input>
-        <button type="submit" className="form__button" aria-label="Логин">
-            Войти
-        </button>
-      </form>
-      <div className="form_container">
-            <p className="form__text"></p>
-            <Link to="/signup" classname="form__link">Регистрация</Link>
-        </div>
-      </section>
-  );
+export default function Login() {
+    return (
+        <section className='login form'>
+            <Link to='/'>
+                <img className='form__logo interactive-button' src={Logo} alt='Логотип'/>
+            </Link>
+            <h2 className='form__title'>Рады видеть!</h2>
+            <form className='form__content'>
+                <ul className='form__sections'>
+                    <li className='form__section'>
+                        <label className='form__input-title' htmlFor='email-login-input'>E-mail</label>
+                        <input className='form__input form__input_type_email' id='email-login-input' type='text'/>
+                        <p className='form__input-error'/>
+                    </li>
+                    <li className='form__section'>
+                        <label className='form__input-title' htmlFor='password-login-input'>Пароль</label>
+                        <input className='form__input form__input_type_password' id='password-login-input' type='password'/>
+                        <p className='form__input-error'/>
+                    </li>
+                </ul>
+                <button className='login__enter form__enter interactive-button' type='submit'>Войти</button>
+            </form>
+            <p className='form__footnote'>
+                Ещё не зарегистрированы?
+                <Link to='/signup' className='form__footnote-link interactive-link'>Регистрация</Link>
+            </p>
+        </section>
+    );
 }
-
-export default Login;

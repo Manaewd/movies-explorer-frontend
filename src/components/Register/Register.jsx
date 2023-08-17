@@ -1,72 +1,38 @@
-import React, { useState } from "react";
-import { Link, Route } from "react-router-dom";
-import logo from "../images/logo.svg"
+import Logo from '../images/logo.svg';
+import { Link } from 'react-router-dom';
 
-function Register({ loggedIn, onRegister }) {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  if (loggedIn) {
-    return <Route to="/" />;
-  }
-
-  function handleEmailChange(e){
-    setEmail(e.target.value)
-  }
-
-  function handlePasswordChange(e){
-    setPassword(e.target.value)
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    onRegister({email, password})
-  }
-
-  return (
-    <section className="register">
-    <img className="form__logo" src={logo} alt="Логотип"></img>
-    <h2 className="form__title">Добро пожаловать!</h2>
-      <form className="auth__form" onSubmit={handleSubmit}>
-        <label>
-          <input
-            // id="email"
-            onChange={handleEmailChange}
-            type="email"
-            name="email"
-            autoComplete="email"
-            placeholder=""
-            className="form__input"
-            required
-            value={email || ""}
-          ></input>
-        </label>
-        <label>
-          <input
-            // id="password"
-            onChange={handlePasswordChange}
-            autoComplete="new-password"
-            required
-            type="password"
-            name="password"
-            placeholder=""
-            className="form__input"
-            value={password || ""}
-          ></input>
-        </label>
-        <button type="submit" className="form__button" aria-label="Зарегистрироваться">
-          Зарегистрироваться
-        </button>
-      </form>
-      <div className="form__container">
-        <p className="form__text">Уже зарегистрированы?</p>
-        <Link to="/sign-in" className="form__link">
-            Войти
-        </Link>
-      </div>
-      </section>
-  );
+export default function Register() {
+    return (
+        <section className='register form'>
+            <Link to='/'>
+                <img className='form__logo interactive-button' src={Logo} alt='Логотип'/>
+            </Link>
+            <h2 className='form__title'>Добро пожаловать!</h2>
+            <form className='form__content'>
+                <ul className='form__sections'>
+                    <li className='form__section'>
+                        <label className='form__input-title' htmlFor='name-register-input'>Имя</label>
+                        <input className='form__input form__input_type_name' id='name-register-input' type='text' />
+                        <p className='form__input-error'/>
+                    </li>
+                    <li className='form__section'>
+                        <label className='form__input-title' htmlFor='email-register-input'>E-mail</label>
+                        <input className='form__input form__input_types_email' id='email-register-input' type='text' />
+                        <p className='form__input-error'/>
+                    </li>
+                    <li className='form__section'>
+                        <label className='form__input-title' htmlFor='password-register-input'>Пароль</label>
+                        <input className='form__input form__input_type_password' id='password-register-input' type='password' />
+                        <p className='form__input-error'>Что-то пошло не так...</p>
+                    </li>
+                </ul>
+                <button className='register__enter form__enter interactive-button' type='submit'>Зарегистрироваться</button>
+            </form>
+            <p className='form__footnote'>
+                Уже зарегистрированы?
+                <Link to='/signin' className='form__footnote-link interactive-link'>Войти</Link>
+            </p>
+        </section>
+    );
 }
-
-export default Register;

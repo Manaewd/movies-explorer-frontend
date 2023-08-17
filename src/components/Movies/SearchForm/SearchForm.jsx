@@ -1,28 +1,23 @@
 import React from "react";
+
 import "./SearchForm.css";
+import FilterCheckbox from "../../FilterCheckbox/FilterCheckbox";
 
-function SearchForm() {
-    return (
-        <div className="search">
-        <form className="searchform">
-            <input
-              className=""
-              name="film"
-              type="text"
-              placeholder="Фильм"
-              required
-            />
-            <button className="searchform__button" type="submit">Найти</button>
-        </form>
-        <div className="searchfilter">
+export default function SearchForm() {
+  return (
+    <section className="search">
+      <div className="search__container">
+        <form className="search__main">
           <input
-          className="searchfilter__checkbox"
-          type="checkbox"
+            className="search__input"
+            placeholder="Фильм"
+            type="text"
+            required
           />
-          <span className="searchfilter__title">Короткометражки</span>
-        </div>
-        </div>
-    )
+          <button type="submit" className="search__button">Найти</button>
+        </form>
+      </div>
+      <FilterCheckbox checkboxName="Короткометражки" />
+    </section>
+  );
 }
-
-export default SearchForm;

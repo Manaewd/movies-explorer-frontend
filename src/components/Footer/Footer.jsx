@@ -1,25 +1,23 @@
-import React from "react";
-import "./Footer.css";
+import React from 'react';
+import './Footer.css';
 
 function Footer() {
-    return (
-      <footer className="footer">
-        <p className="footer__title">Учебный проект Яндекс.Практикум х BeatFilm.</p>
-        <div className="footer__container">
-            <p className="footer__copiright">&copy; 2023</p>
-            <nav className="footer__nav">
-                <ul className="footer__nav_items">
-                    <li className="footer__nav_item">
-                        <a className="footer__nav-link" href="https://practicum.yandex.ru/">Яндекс.Практикум</a>
-                    </li>
-                    <li className="footer__nav_item">
-                        <a className="footer__nav-link" href="https://github.com/Manaewd">Github</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-      </footer>
-    );
-  }
+  const currentYear = new Date().getFullYear();
   
-  export default Footer;
+  return (
+    <footer className="footer">
+      <div className="footer__container page__section page__section_size_small">
+        <p className="footer__title">Учебный проект Яндекс.Практикум х BeatFilm.</p>
+        <div className="footer__down">
+          <p className="footer__year">&copy; {currentYear}</p>
+          <div className="footer__buttons">
+            <a href="https://practicum.yandex.ru/" className="footer__button footer__button_praktikum" target="_blank" rel="noreferrer">Яндекс.Практикум</a>
+            <a href="https://github.com/Manaewd" className="footer__button footer__button_github" target="_blank" rel="noreferrer">Github</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;

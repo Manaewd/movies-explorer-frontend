@@ -1,50 +1,40 @@
-// import { useContext } from 'react';
+import React, { useState } from "react";
 
-function MoviesCard({ onCardClick, card, onCardLike }) {
+import "./MoviesCard.css";
 
-//   const isOwn = card.owner._id === currentUser._id;
-//   const isLiked = card.likes.some(i => i._id === currentUser._id);
+export default function MoviesCard({
+  isMovieSaved,
+  title,
+  duration,
+  image,
+  block,
+}) {
+  const [isSaved, setIsSaved] = useState(isMovieSaved);
 
-  function handleCardClick() {
-    onCardClick(card);
-  }
-
-//   function handleDeleteClick() {
-//     onCardDelete(card);
-//   }
-
-  function handleLikeClick() {
-    onCardLike(card)
-  }
+  const handleSaveMovie = () => {
+    setIsSaved(!isSaved);
+  };
 
   return (
-    <div className="card">
-      {/* {isOwn &&
-        <button
-          type={"button"}
-          className="card__trash-button"
-          onClick={handleDeleteClick}>
-        </button>} */}
-      <img
-        className="card__image"
-        src={card.link}
-        alt={card.name}
-        onClick={handleCardClick}
-      />
-      <div className="card__container">
-        <h2 className="card__title">{card.name}</h2>
-        <div className="card__container-like">
+    <div className="movie-card">
+      <img className="movie-card__img" src={image} alt="Кадр из фильма" />
+      <div className="movies-card__container">
+        <div className="movie-card__info">
+          <h2 className="movie-card__title">{title}</h2>
+          {block === "general" ? (
           <button
+            className={`movie-card__save-button ${
+              isSaved ? "movie-card__save-button_saved" : ""
+            }`}
             type="button"
-            className='card__button_type_active'
-            aria-label="like"
-            onClick={handleLikeClick}
-          ></button>
+            onClick={handleSaveMovie}
+          />
+        ) : (
+          <button className={"movie-card__remove-button"} type="button" />
+        )}
         </div>
+        <p className="movie-card__duration">{duration}</p>
       </div>
-      <p className="card__duration">{card.duration}</p>
     </div>
   );
 }
-
-export default MoviesCard;

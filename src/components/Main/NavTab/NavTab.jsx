@@ -1,25 +1,35 @@
-import './NavTab.css';
+import React from "react";
+import { NavLink, Link } from "react-router-dom";
 
-export default function NavTab(){
-    return(
-        <nav className='navtab'>
-            <ul className="navtab__items">
-                <li className="navtab__item">
-                    <a className="navtab__item-link" href="#about">
-                        О проекте
-                    </a>
-                </li>
-                <li className="navtab__item">
-                    <a className="navtab__item-link" href="#techs">
-                        Технологии
-                    </a>
-                </li>
-                <li className="navtab__item">
-                    <a className="navtab__item-link" href="#about-me">
-                        Студент
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    )
+import "./NavTab.css";
+import Logo from "../../images/logo.svg";
+
+function NavMenu({ setIsOpened }) {
+
+  function handleOpen() {
+    setIsOpened(true);
+  }
+
+  return (
+    <nav className="navtab">
+      <Link className="logo navtab__logo" to="/">
+        <img src={Logo} alt="Логотип" />
+      </Link>
+      <div className="navtab__links">
+        <NavLink className="navtab__link" to="/movies">Фильмы</NavLink>
+        <NavLink className="navtab__link" to="/saved-movies">
+          Сохранённые фильмы
+        </NavLink>
+      </div>
+      <div className="navtab__profile">
+        <Link className="navtab__profile-link animation-btn" to="/profile">Аккаунт</Link>
+      </div>
+      <button className="navtab__burger"
+        onClick={handleOpen}
+        type="menu"
+      ></button>
+    </nav>
+  );
 }
+
+export default NavMenu;
