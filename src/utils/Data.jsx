@@ -127,14 +127,14 @@ const savedMovies = [
       duration: '1ч 42м',
       image: 'https://www.linkpicture.com/q/design2.png',
       saved: false,
-  },
-  {
-      id: 3,
-      title: 'В погоне за Бенкси',
-      duration: '1ч 42м',
-      image: 'https://www.linkpicture.com/q/design2.png',
-      saved: false,
-  },
+  }
+  // {
+  //     id: 3,
+  //     title: 'В погоне за Бенкси',
+  //     duration: '1ч 42м',
+  //     image: 'https://www.linkpicture.com/q/design2.png',
+  //     saved: false,
+  // },
 ];
 
 export {initialMovies, savedMovies};
