@@ -1,4 +1,6 @@
 import React from "react";
+import {Link} from 'react-router-dom';
+
 import NavTab from "../Main/NavTab/NavTab";
 import SideBar from "../SideBar/SideBar";
 import "./Profile.css";
@@ -17,10 +19,11 @@ function Profile({ setMenuOpened, menuOpened, menuClosed }) {
     //     }));
 
   return (
+    <main>
     <section className="profile">
       <NavTab setIsOpened={setMenuOpened} />
       <div className="profile__content">
-        <h2 className="profile__title">Привет, {user.name}!</h2>
+        <h1 className="profile__title">Привет, {user.name}!</h1>
         <div className="profile__inputs">
           <label className="profile__input-label">
             Имя
@@ -44,24 +47,13 @@ function Profile({ setMenuOpened, menuOpened, menuClosed }) {
           </label>
         </div>
         <div className="profile__btn-container">
-          <button
-            className="profile__btn"
-            type="submit"
-            aria-label="Редактировать"
-          >
-            Редактировать
-          </button>
-          <button
-            className="profile__btn profile__btn_red"
-            type="submit"
-            aria-label="Выйти"
-          >
-            Выйти из аккаунта
-          </button>
+          <Link to="/profile" className="profile__btn">Редактировать</Link>
+          <Link to="/" className="profile__btn profile__btn_red">Выйти из аккаунта</Link>
         </div>
         <SideBar isOpened={menuOpened} menuClosed={menuClosed} />
       </div>
     </section>
+    </main>
   );
 }
 

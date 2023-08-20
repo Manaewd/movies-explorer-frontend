@@ -7,17 +7,16 @@ import closeButton from "../images/icon-close-menu.svg";
 export default function SideBar({ isOpened, menuClosed }) {
   return (
     <>
-      <div className={isOpened ? "sidebar" : "sidebar_hidden"}>
+      <div className={isOpened ? "sidebar" : " sidebar sidebar_hidden"}>
         <div className="sidebar__container">
           <div className="sidebar__shadow"></div>
           <nav className="sidebar__nav-container">
             <button
               className="sidebar__close-button"
               type="button"
-              area-label="Закрыть меню"
               onClick={menuClosed}
             >
-              <img src={closeButton} alt="closeButton" />
+              <img src={closeButton} alt="Кнопка закрытия" />
             </button>
             <ul className="sidebar__elements">
               <li className="sidebar__element" onClick={menuClosed}>

@@ -6,17 +6,20 @@ import Portfolio from "./Portfolio/Portfolio";
 import Header from '../Header/Header';
 import Footer from "../Footer/Footer";
 
+
 function Main() {
     return (
-        <main className="main">
+        <>
             <Header />
-            <Promo />
-            <AboutProject />
-            <Techs />
-            <AboutMe />
-            <Portfolio />
+            <main>
+              <Promo />
+              <AboutProject />
+              <Techs />
+              <AboutMe />
+              <Portfolio />
+            </main>
             <Footer />
-        </main>
+        </>
     );
 };
 

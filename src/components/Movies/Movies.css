@@ -1,6 +1,6 @@
 .movies {
-  width: 100%;
   margin: 0 auto;
+  width: 100%;
 }
 .movies__items {
   grid-template-columns: repeat(4, 270px);
@@ -9,11 +9,10 @@
   grid-row-gap: 116px;
   justify-content: center;
   list-style: none;
-  margin: 0;
-  padding: 70px 0 100px ;
+  padding: 102px 0 100px;
   display: grid;
 }
-.button__more {
+.movies__button {
   display: block;
   color: #000;
   font-size: 12px;
@@ -27,48 +26,33 @@
   background-color: #F9F9F9;
   border: none;
 }
-.button__more:hover {
+.movies__button:hover {
   cursor: pointer;
 }
-/* @media screen and (min-width: 1160px) {
-  .movies {
-    width: 90%;
- }
-  .movies__items {
-    padding-top: 80px;
-    padding-left: 20px;
-    grid-template-columns: repeat(4, 270px);
-    grid-auto-rows: 258px;
-    grid-gap: 36px 30px;
- }
-} */
-@media screen and (min-width: 768px) and (max-width: 1159px){
-  .movies {
-    width: 100%;
- }
+
+@media screen and (min-width: 768px) and (max-width: 1279px){
   .movies__items {
     grid-template-columns: repeat(2, 339px);
     grid-auto-rows: 190px;
     grid-column-gap: 30px;
     grid-row-gap: 109px;
-    justify-content: center;
+    padding: 56px 0 100px;
  }
-  .movies__items {
-    padding-left: 0;
- }
-  .button__more {
+  .movies__button {
     margin-bottom: 156px;
  }
 }
+
 @media screen and (max-width: 767px) {
-  .button__more {
+  .movies__button {
     width: 240px;
     height: 36px;
-    margin-bottom: 156px;
+    margin-bottom: 154px;
  }
   .movies__items {
+    margin: 0 auto;
+    width: 300px;
     padding-top: 90px;
-    padding-left: 0;
     grid-template-columns: repeat(auto-fill, 300px);
     grid-auto-rows: 168px;
     grid-gap: 112px;

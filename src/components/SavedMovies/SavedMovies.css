@@ -4,51 +4,37 @@
   }
   
   .saved-movies__container {
-    grid-template-columns: repeat(3, 270px);
+    width: 1140px;
+    grid-template-columns: repeat(4, 270px);
     grid-auto-rows: 151px;
     grid-gap: 20px;
-    padding: 70px 0 160px;
+    grid-row-gap: 116px;
     display: grid;
     justify-content: left;
     list-style: none;
-    width: 1140px;
-    margin: 48px auto 240px;
+    margin: 120px auto 398px;
+    padding: 0;
   }
 
-  @media screen and (min-width: 1024px) and (max-width: 1160px) {
-    .saved-movies {
-      width: 90%;
-    }
-  
-    .saved-movies__container {
-      margin: 0 auto 40px;
-      padding-top: 80px;
-      padding-left: 30px;
-    }
-  }
 
-  @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .saved-movies {
-      width: 100%;
-    }
-  
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     .saved-movies__container {
       width: 708px;
-      margin: 0 auto 72px;
       grid-template-columns: repeat(2, 339px);
-      grid-auto-rows: 268px;
-      grid-gap: 30px;
+      grid-auto-rows: 190px;
+      grid-column-gap: 30px;
+      grid-row-gap: 109px;
+      margin: 72px auto 308px;
     }
   
   }
 
   @media screen and (max-width: 767px) {
     .saved-movies__container {
+      margin: 88px auto 308px;
+      width: 300px;
       grid-template-columns: repeat(1, 300px);
-      grid-auto-rows: 258px;
-      grid-gap: 20px;
-      padding: 40px 0 0 10px;
-      margin-bottom: 218px;
-      width: 100%;
+      grid-auto-rows: 168px;
+      grid-gap: 112px;
     }
   } 

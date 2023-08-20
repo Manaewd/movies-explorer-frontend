@@ -17,7 +17,13 @@ function AboutMe() {
                         После того, как прошёл курс по веб-разработке,
                         начал заниматься фриланс-заказами и ушёл с постоянной работы.
                     </p>
-                    <Link className='about-me__link' to={'https://github.com/Manaewd'}>Github</Link>
+                    <Link
+                      className='about-me__link'
+                      to={'https://github.com/Manaewd'}
+                      target='_blank'
+                    >
+                      Github
+                    </Link>
                 </div>
                 <img className='about-me__photo' src={me} alt='Фотография студента'/>
             </div>

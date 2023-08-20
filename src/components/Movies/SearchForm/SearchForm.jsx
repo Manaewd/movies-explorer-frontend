@@ -12,9 +12,10 @@ export default function SearchForm() {
             className="search__input"
             placeholder="Фильм"
             type="text"
+            minLength='2'
             required
           />
-          <button type="submit" className="search__button">Найти</button>
+          <button type="submit" className="search__button" aria-label='Запустить поиск'>Найти</button>
         </form>
       </div>
       <FilterCheckbox checkboxName="Короткометражки" />

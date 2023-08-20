@@ -8,16 +8,31 @@ function Portfolio() {
             <nav className="portfolio__nav">
                 <ul className='portfolio__list'>
                     <li className='portfolio__list-item'>
-                        <Link className='portfolio__link' to='https://github.com/Manaewd'>Статичный сайт</Link>
-                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
+                        <Link
+                          className='portfolio__link'
+                          to='https://github.com/Manaewd/how-to-learn'
+                          target='_blank'
+                        >
+                          Статичный сайт
+                        </Link>
                     </li>
                     <li className='portfolio__list-item'>
-                        <Link className='portfolio__link' to='https://github.com/Manaewd'>Адаптивный сайт</Link>
-                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
+                        <Link
+                          className='portfolio__link'
+                          to='https://github.com/Manaewd/russian-travel'
+                          target='_blank'
+                        >
+                          Адаптивный сайт
+                        </Link>
                     </li>
                     <li className='portfolio__list-item'>
-                        <Link className='portfolio__link' to='https://github.com/Manaewd'>Одностраничное приложение</Link>
-                        {/* <button className="portfolio__link-icon" type="button" aria-label="Открыть ссылку">↗</button> */}
+                        <Link
+                          className='portfolio__link'
+                          to='https://github.com/Manaewd/react-mesto-api-full-gha'
+                          target='_blank'
+                        >
+                          Одностраничное приложение
+                        </Link>
                     </li>
                 </ul>
             </nav>

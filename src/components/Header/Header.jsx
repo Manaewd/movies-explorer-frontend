@@ -10,8 +10,8 @@ export default function Header() {
                 <img className='header__logo' src={Logo} alt='логотип'></img>
             </Link>
             <nav className='header__menu'>
-                <Link className='header__register animation-link' to='/sign-up'>Регистрация</Link>
-                <Link className='header__login animation-btn' to='/sign-in'>Войти</Link>
+                <Link className='header__register animation-link' to='/signup'>Регистрация</Link>
+                <Link className='header__login animation-btn' to='/signin'>Войти</Link>
             </nav>
    </header>
   )

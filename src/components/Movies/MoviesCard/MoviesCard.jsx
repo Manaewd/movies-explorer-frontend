@@ -16,9 +16,9 @@ export default function MoviesCard({
   };
 
   return (
-    <div className="movie-card">
+    <li className="movie-card">
       <img className="movie-card__img" src={image} alt="Кадр из фильма" />
-      <div className="movies-card__container">
+      <div className="movie-card__container">
         <div className="movie-card__info">
           <h2 className="movie-card__title">{title}</h2>
           {block === "general" ? (
@@ -35,6 +35,6 @@ export default function MoviesCard({
         </div>
         <p className="movie-card__duration">{duration}</p>
       </div>
-    </div>
+    </li>
   );
 }

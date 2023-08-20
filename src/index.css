@@ -1,7 +1,6 @@
 @import url(./vendor/fonts/fonts.css);
 @import url(./vendor/normalize.css);
 
-
 .page {
   min-height: 100vh;
   margin: 0 auto;

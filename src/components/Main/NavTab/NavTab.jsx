@@ -26,7 +26,7 @@ function NavMenu({ setIsOpened }) {
       </div>
       <button className="navtab__burger"
         onClick={handleOpen}
-        type="menu"
+        type="button"
       ></button>
     </nav>
   );

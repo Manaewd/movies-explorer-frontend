@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-// import Header from "../Header/Header";
-// import Footer from '../Footer/Footer';
 
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -22,6 +20,10 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        <Route
+          path="/"
+          element={<Main />}
+        />
         <Route
           path="/movies"
           element={<Movies
@@ -48,16 +50,12 @@ function App() {
           />}
         />
         <Route
-          path="/sign-up"
+          path="/signup"
           element={<Register />}
         />
         <Route
-          path="/sign-in"
+          path="/signin"
           element={<Login />}
-        />
-        <Route
-          path="/"
-          element={<Main />}
         />
         <Route
           path="*"

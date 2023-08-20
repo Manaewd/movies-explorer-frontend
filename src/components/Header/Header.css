@@ -54,6 +54,7 @@
         line-height: 1.6;
    }
 }
+
 @keyframes move {
     0% {
         transform: rotateZ(0deg);
