@@ -24,7 +24,7 @@ function Profile({ setMenuOpened, menuOpened, menuClosed }) {
       <NavTab setIsOpened={setMenuOpened} />
       <div className="profile__content">
         <h1 className="profile__title">Привет, {user.name}!</h1>
-        <div className="profile__inputs">
+        <form className="profile__inputs">
           <label className="profile__input-label">
             Имя
             <input
@@ -32,6 +32,8 @@ function Profile({ setMenuOpened, menuOpened, menuClosed }) {
               className="profile__input"
               placeholder="Виталий"
               name="name"
+              minLength='2'
+              maxLength='40'
               required
             />
           </label>
@@ -45,7 +47,7 @@ function Profile({ setMenuOpened, menuOpened, menuClosed }) {
               required
             />
           </label>
-        </div>
+        </form>
         <div className="profile__btn-container">
           <Link to="/profile" className="profile__btn">Редактировать</Link>
           <Link to="/" className="profile__btn profile__btn_red">Выйти из аккаунта</Link>

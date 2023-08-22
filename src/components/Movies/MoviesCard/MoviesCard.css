@@ -75,7 +75,7 @@
   height: 30px;
 }
 
-.movie-card__delete-button:hover {
+.movie-card__remove-button:hover {
   opacity: 0.8;
 }
 
@@ -89,9 +89,17 @@
   .movie-card {
     max-width: 339px;
  }
+
+ .movie-card__title {
+  font-size: 13px;
+}
 }
 @media screen and (max-width: 425px) {
   .movie-card__info {
     min-width: 210px;
  }
+
+ .movie-card__title {
+    font-size: 12px;
+}
 }

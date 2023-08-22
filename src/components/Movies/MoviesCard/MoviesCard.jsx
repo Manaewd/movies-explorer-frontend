@@ -17,7 +17,7 @@ export default function MoviesCard({
 
   return (
     <li className="movie-card">
-      <img className="movie-card__img" src={image} alt="Кадр из фильма" />
+      <img className="movie-card__img" src={image} alt={title} />
       <div className="movie-card__container">
         <div className="movie-card__info">
           <h2 className="movie-card__title">{title}</h2>

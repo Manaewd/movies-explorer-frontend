@@ -5,6 +5,7 @@
     align-items: center;
     background: #073042;
 }
+
 .header__register {
     font-weight: 500;
     font-size: 12px;
@@ -14,6 +15,11 @@
     color: #FFFFFF;
     text-decoration: none;
 }
+
+.header__register:hover {
+    opacity: 0.8;
+}
+
 .header__login {
     font-weight: 500;
     font-size: 12px;
@@ -24,13 +30,22 @@
     border-radius: 3px;
     border: none;
 }
+
+.header__login:hover {
+    opacity: 0.8;
+}
+
 .header__menu {
     display: flex;
     gap: 30px;
     padding-bottom: 8px;
 }
 .header__logo {
-    animation: move 10s infinite linear;
+    cursor: pointer;
+}
+
+.header__logo:hover {
+    opacity: 0.8;
 }
 @media screen and (max-width: 769px) {
     .header {
@@ -55,7 +70,7 @@
    }
 }
 
-@keyframes move {
+/* @keyframes move {
     0% {
         transform: rotateZ(0deg);
    }
@@ -65,4 +80,4 @@
     100% {
         transform: rotateZ(360deg);
    }
-}
+} */

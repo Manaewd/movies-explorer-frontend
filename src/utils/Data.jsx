@@ -123,14 +123,14 @@ const savedMovies = [
   },
   {
       id: 2,
-      title: 'Киноальманах «100 лет дизайна»',
+      title: '33 слова о дизайне',
       duration: '1ч 42м',
       image: 'https://www.linkpicture.com/q/design2.png',
       saved: false,
   },
   {
       id: 3,
-      title: 'В погоне за Бенкси',
+      title: '33 слова о дизайне',
       duration: '1ч 42м',
       image: 'https://www.linkpicture.com/q/design2.png',
       saved: false,
