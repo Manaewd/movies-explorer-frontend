@@ -1,0 +1,145 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.sidebar_hidden {
+  display: none;
+}
+
+.sidebar__container {
+  position: relative;
+}
+
+.sidebar__shadow {
+  width: 95vw;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  position: absolute;
+  opacity: 0.3;
+  z-index: 3;
+}
+
+.sidebar__nav-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  width: 520px;
+  top: 0;
+  right: 0;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  color: #000;
+  z-index: 3;
+}
+
+.sidebar__close-button {
+  position: absolute;
+  display: block;
+  min-width: 22px;
+  cursor: pointer;
+  border: none;
+  right: 26px;
+  top: 28px;
+  background-color: inherit;
+  margin: 0;
+  padding: 0;
+}
+.sidebar__close-button:hover {
+  opacity: 0.8;
+}
+
+.sidebar__close-button img {
+  width: 100%;
+}
+
+.sidebar__elements {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  list-style: none;
+  flex-direction: column;
+  margin-top: 162px;
+  padding: 0;
+}
+
+.sidebar__element {
+  text-decoration: none;
+  background-color: inherit;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.sidebar__element:hover {
+  text-decoration: underline;
+}
+
+.sidebar__link {
+  text-decoration: none;
+  background-color: inherit;
+  color: #000;
+}
+
+.sidebar__account-element  {
+  margin-bottom: 288px;
+  color: #000000;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  border-radius: 40px;
+  box-shadow: 0px 2px 14px 0px rgba(0, 0, 0, 0.08);
+  padding: 8px 38px 8px 18px;
+  position: relative;
+}
+
+.sidebar__account-element ::before {
+  background-image: url(../images/icon-profile.svg);
+  border-radius: 50px ;
+  background-color: #F9F9F9;
+  background-repeat: no-repeat;
+  background-position: center;
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 25%;
+  right: 14%;
+}
+
+@media screen and (min-width: 800px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .sidebar__nav-container {
+    min-width: 320px;
+    width: 100vw;
+  }
+
+  .sidebar__elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    margin-top: 144px;
+  }
+
+  .sidebar__account-element {
+    margin-bottom: 488px;
+  }
+
+  .sidebar__close-button {
+    top: 12px;
+    right: 12px;
+  }
+}

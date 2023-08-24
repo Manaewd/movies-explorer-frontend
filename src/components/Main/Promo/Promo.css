@@ -1,0 +1,125 @@
+.promo {
+    padding: 68px 0 72px;
+    background-color: #073042;
+}
+.promo__container {
+    width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.promo__items {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.promo__title {
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 58px;
+    max-width: 640px;
+    margin: 0;
+    color: #FFFFFF;
+}
+
+.promo__subtitle {
+    max-width: 310px;
+    margin: 0;
+    padding: 36px 0 0;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    opacity: 50%;
+}
+
+.promo__link {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    margin: 146px 0 0;
+    padding: 10px 20px;
+    border: 1px solid #FFFFFF;
+    opacity: 0.6;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: opacity .2s linear;
+}
+
+.promo__link:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.promo__logo {
+    width: 310px;
+    height: 304px;
+}
+@media all and (max-width: 1279px) {
+    .promo {
+        align-items: center;
+        text-align: center;
+   }
+
+   .promo__container {
+        width: 668px;
+        flex-direction: column-reverse;
+    }
+    
+    .promo__items {
+        align-items: center;
+    }
+   
+    .promo__title {
+        max-width: 680px;
+        font-size: 40px;
+        line-height: 50px;
+   }
+
+    .promo__subtitle {
+        max-width: 260px;
+        padding: 21px 0 0;
+   }
+
+    .promo__link {
+        margin: 92px 0 0;
+   }
+
+    .promo__logo {
+        margin: 0 auto;
+        padding: 66px 0 49px;
+   }
+}
+
+@media all and (max-width: 767px) {
+    .promo {
+        padding: 0 0 30px;
+   }
+
+   .promo__container {
+        width: 284px;
+    }
+
+    .promo__title {
+        font-size: 30px;
+        line-height: 38px;
+        letter-spacing: -0.04em;
+   }
+
+    .promo__subtitle {
+        padding: 24px 0 0;
+   }
+
+    .promo__link {
+        margin: 80px 0 0;
+   }
+
+    .promo__logo {
+        width: 210px;
+        height: 206px;
+        padding: 62px 0 44px;
+   }
+}

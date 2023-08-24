@@ -1,0 +1,14 @@
+@import url(./vendor/fonts/fonts.css);
+@import url(./vendor/normalize.css);
+
+.page {
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  min-width: 320px;
+  font-family: 'Inter', 'Arial', sans-serif;
+  background-color: white;
+  color: black;
+  /* outline: 1px solid red; */
+}

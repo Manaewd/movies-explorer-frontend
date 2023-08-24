@@ -1,0 +1,98 @@
+.footer {
+    padding: 0;
+}
+
+.footer__title {
+    color: #8B8B8B;
+    margin: 0;
+    width: 100%;
+    border-bottom: 1px solid #424242;
+    padding-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.23;
+    text-align: center;
+}
+
+.footer__down {
+    font-size: 13px;
+    line-height: 1.23;
+    margin: 20px 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footer__year {
+    margin: 0;
+}
+
+.footerlink {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.footerlink__buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.footerlink__button {
+    transition: opacity .3s ease-in-out;
+    margin: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.footerlink__button:hover {
+    opacity: 0.5;
+}
+
+.footerlink__button_praktikum {
+    margin-right: 20px;
+}
+
+@media all and (max-width:1279px) {
+    .footer {
+        padding-top: 80px;
+   }
+    .footer__down {
+        margin: 18px 30px 20px 30px;
+   }
+}
+
+@media all and (max-width:767px) {
+    .footer {
+        padding-top: 50px;
+   }
+
+    .footer__title {
+        font-size: 12px;
+   }
+
+    .footer__down {
+        flex-direction: column-reverse;
+        align-items: center;
+        margin-top: 30px;
+   }
+
+   .footerlink {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 28px;
+    }
+   
+    .footerlink__buttons {
+        margin: 0;
+   }
+
+    .footerlink__button_praktikum {
+        margin-right: 0;
+        margin-bottom: 12px;
+   }
+}
+@media all and (min-width:320px) {
+    .footer {
+        padding-top: 0;
+   }
+}
