@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
-import MoviesCardList from './MoviesCardList/MoviesCardList';
+import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import SearchForm from "./SearchForm/SearchForm";
 import Footer from "../Footer/Footer";
 import "./Movies.css";
 
-
-export default function Movies({ movies, savedMoviesList, onCardSave, onCardDelete }) {
+export default function Movies({
+  movies,
+  savedMoviesList,
+  onCardSave,
+  onCardDelete,
+}) {
   const [checkMovies, setCheckMovies] = useState([]);
-  
+
   const searchMovies = (checkMovies) => {
     setCheckMovies(checkMovies);
   };
-
 
   return (
     <>
@@ -24,7 +27,9 @@ export default function Movies({ movies, savedMoviesList, onCardSave, onCardDele
         />
         <MoviesCardList
           movies={checkMovies.length > 0 ? checkMovies : movies}
-          savedMoviesList={checkMovies.length > 0 ? checkMovies : savedMoviesList}
+          savedMoviesList={
+            checkMovies.length > 0 ? checkMovies : savedMoviesList
+          }
           onCardSave={onCardSave}
           isSaved={false}
           onCardDelete={onCardDelete}

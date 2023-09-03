@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import MoviesCard from "../MoviesCard/MoviesCard";
 import "./MoviesCardList.css";
@@ -12,13 +12,18 @@ import {
   DESKTOP_ADDITIONAL_MOVIES,
   TAB_ADDITIONAL_MOVIES,
   MOBILE_ADDITIONAL_MOVIES,
-} from '../../../utils/constants'
+} from "../../../utils/constants";
 
-export default function MoviesCardList({ movies, savedMoviesList, onCardSave, onCardDelete, isSaved }) {
-  
+export default function MoviesCardList({
+  movies,
+  savedMoviesList,
+  onCardSave,
+  onCardDelete,
+  isSaved,
+}) {
   const { pathname } = useLocation();
   const [cardsToShow, setCardsToShow] = useState(0);
-  
+
   useEffect(() => {
     const handleResize = () => {
       let newCardsToShow;
@@ -50,11 +55,11 @@ export default function MoviesCardList({ movies, savedMoviesList, onCardSave, on
 
   const loadMovies = () => {
     if (window.innerWidth >= SCREEN_LARGE) {
-      setCardsToShow(prevCards => prevCards + DESKTOP_ADDITIONAL_MOVIES);
+      setCardsToShow((prevCards) => prevCards + DESKTOP_ADDITIONAL_MOVIES);
     } else if (window.innerWidth >= SCREEN_MIDDLE) {
-      setCardsToShow(prevCards => prevCards + TAB_ADDITIONAL_MOVIES);
+      setCardsToShow((prevCards) => prevCards + TAB_ADDITIONAL_MOVIES);
     } else {
-      setCardsToShow(prevCards => prevCards + MOBILE_ADDITIONAL_MOVIES);
+      setCardsToShow((prevCards) => prevCards + MOBILE_ADDITIONAL_MOVIES);
     }
   };
 
@@ -64,9 +69,9 @@ export default function MoviesCardList({ movies, savedMoviesList, onCardSave, on
 
   return (
     <section className="movies-card-list">
-      {pathname === '/movies' ? (
-      <ul className="movies-card-list__container">
-        {movies.slice(0, cardsToShow).map((movie) => (
+      {pathname === "/movies" ? (
+        <ul className="movies-card-list__container">
+          {movies.slice(0, cardsToShow).map((movie) => (
             <MoviesCard
               key={isSaved ? movie._id : movie.id}
               movie={movie}
@@ -74,9 +79,11 @@ export default function MoviesCardList({ movies, savedMoviesList, onCardSave, on
               savedMoviesList={savedMoviesList}
               isSaved={isSaved}
               onCardSave={onCardSave}
+              onCardDelete={onCardDelete}
             />
           ))}
-        </ul>) : (
+        </ul>
+      ) : (
         <ul className="movies-card-list__container">
           {savedMoviesList.slice(0, cardsToShow).map((movie) => (
             <MoviesCard
@@ -86,15 +93,13 @@ export default function MoviesCardList({ movies, savedMoviesList, onCardSave, on
               saved={getSavedMovies(savedMoviesList, movie)}
               isSaved={isSaved}
               savedMoviesList={savedMoviesList}
+              onCardSave={onCardSave}
             />
           ))}
-      </ul>
+        </ul>
       )}
-      {pathname === '/movies' && cardsToShow < movies.length ? (
-        <button
-          className="movies__button"
-          onClick={loadMovies}
-        >
+      {pathname === "/movies" && cardsToShow < movies.length ? (
+        <button className="movies__button" onClick={loadMovies}>
           Ещё
         </button>
       ) : null}
