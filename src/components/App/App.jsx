@@ -27,7 +27,6 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [savedMoviesList, setSavedMoviesList] = useState([]);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +38,7 @@ function App() {
           setCurrentUser(userData)
           setMovies(moviesData)
           setSavedMoviesList(moviesSavedData)
-          navigate('/movies');
+          navigate("/movies", { replace: true });
         })
         .catch((err) => console.log(err));
     }
@@ -51,11 +50,13 @@ function App() {
       .login({ email, password })
       .then(() => {
         setLoggedIn(true);
-        navigate('/movies');
+        navigate("/movies", { replace: true });
+        setIsSuccess(true);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(`Ошибка: ${err}`);
       })
+      .finally(() => setIsInfoTooltipOpen(true));
   }
 
   function handleRegister({ name, email, password }) {
@@ -64,7 +65,7 @@ function App() {
       .register({ name, email, password })
       .then(() => {
         setLoggedIn(true);
-        navigate("/movies");
+        navigate("/movies", { replace: true });
         setIsSuccess(true);
       })
       .catch((err) => {
@@ -73,14 +74,13 @@ function App() {
       })
       .finally(() => setIsInfoTooltipOpen(true));
   }
-  
 
   function tokenCheck() {
     mainApi
         .checkToken()
         .then(() => {
           setLoggedIn(true);
-          navigate("/");
+          navigate("/movies", { replace: true });
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
@@ -92,7 +92,7 @@ function App() {
       .logout()
       .then(() => {
         setLoggedIn(false);
-        navigate('/');
+        navigate('/', { replace: true })
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -108,6 +108,7 @@ function App() {
         setCurrentUser({ name, email })
         setIsSuccess(true)
         setIsInfoTooltipOpen(true)
+        navigate("/profile", { replace: true });
       })
       .catch((err) => {
         console.log(err)
@@ -207,6 +208,7 @@ function App() {
           element=
             {<Login
               onLogin={handleLogin}
+              isLoader={isLoader}
             />}
         />
         <Route
@@ -220,8 +222,8 @@ function App() {
         isSuccess={isSuccess}
         isOpen={isInfoTooltipOpen}
         onClose={closeAllPopups}
-        textIsSuccessTrue={"Успешно!"}
-        textIsSuccessFalse={"Что-то пошло не так! Попробуйте ещё раз."}
+        textIsSuccessTrue={"Успешно."}
+        textIsSuccessFalse={"Что-то пошло не так. Попробуйте ещё раз."}
       />
     </div>
     </CurrentUserContext.Provider>

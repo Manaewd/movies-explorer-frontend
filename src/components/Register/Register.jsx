@@ -94,7 +94,11 @@ export default function Register({ onRegister }) {
                             <p className={`auth__error-message ${errorMessage && 'auth__error-message_visible'}`}>{errorMessage}</p>
                         </li>
                     </ul>
-                    <button className={`register__enter ${!isValid && 'form__enter interactive-button'}`} type='submit' aria-label='Зарегистрировать аккаунт'>
+                    <button
+                        className={`register__enter form__enter ${!isValid && 'form__enter_disabled'}`}
+                        type='submit'
+                        aria-label='Зарегистрировать аккаунт'
+                    >
                         Зарегистрироваться
                     </button>
                 </form>
