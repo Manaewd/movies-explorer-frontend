@@ -2,8 +2,13 @@
     width: 100%;
     margin: 0 auto;
   }
-  
+
   .saved-movies__container {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* .saved-movies__container {
     width: 1140px;
     grid-template-columns: repeat(4, 270px);
     grid-auto-rows: 151px;
@@ -37,4 +42,4 @@
       grid-auto-rows: 168px;
       grid-gap: 112px;
     }
-  } 
+  }  */

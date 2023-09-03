@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import "./App.css";
-
+import Header from '../Header/Header';
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies"
@@ -10,74 +10,74 @@ import Profile from "../Profile/Profile";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+
+import mainApi from '../../utils/MainApi';
+import moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [cards, setCards] = useState([]);
 
-  const [RegSuccess, setRegSuccess] = useState(false);
+  // const [isLoader, setIsLoader] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
-  const [emailHeader, setEmailHeader] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [savedMoviesList, setSavedMoviesList] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    handleTokenCheck();
+    tokenCheck();
     if (loggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      Promise.all([mainApi.getUserInfo(), moviesApi.getMovies(), mainApi.getSavedMovies()])
         .then((result) => {
-          const [userData, cardsData] = result;
-          setCurrentUser(userData);
-          setCards(cardsData);
-          navigate('/');
+          const [userData, moviesData, moviesSavedData] = result;
+          setCurrentUser(userData)
+          setMovies(moviesData)
+          setSavedMoviesList(moviesSavedData)
+          navigate('/movies');
         })
         .catch((err) => console.log(err));
     }
   }, [loggedIn]);
 
-  function handleRegister({ email, password }) {
-    auth
-      .register({ email, password })
+  function handleLogin({ email, password }) {
+    mainApi
+      .login({ email, password })
       .then(() => {
-        setRegSuccess(true);
-        navigate("/signin");
+        setLoggedIn(true);
+        navigate('/movies');
       })
       .catch((err) => {
-        setRegSuccess(false);
+        console.log(err);
+      })
+  }
+
+  function handleRegister({ name, email, password }) {
+    mainApi
+      .register({ name, email, password })
+      .then(() => {
+        setLoggedIn(true);
+        navigate("/movies");
+        setIsSuccess(true);
+      })
+      .catch((err) => {
+        setIsSuccess(false);
         console.log(`Ошибка: ${err}`);
       })
       .finally(() => setIsInfoTooltipOpen(true));
   }
   
 
-  function handleLogin({ email, password }) {
-    auth
-      .login({ email, password })
-      .then(() => {
-        setLoggedIn(true);
-        setEmailHeader(email);
-      })
-      .catch((err) => {
-        setRegSuccess(false);
-        setIsInfoTooltipOpen(true)
-        console.log(err);
-      });
-  }
-
-  function handleTokenCheck() {
-      auth
+  function tokenCheck() {
+    mainApi
         .checkToken()
-        .then((user) => {
+        .then(() => {
           setLoggedIn(true);
-          setEmailHeader(user.email);
           navigate("/");
         })
         .catch((err) => {
@@ -85,126 +85,121 @@ function App() {
         });
   }
 
-  function handleAddPlaceSubmit(name, link) {
-    api
-      .addNewCard(name, link)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(id => id === currentUser._id);
-
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-        state.map((c) => c._id === card._id ? newCard : c))
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        setCards((newCard) => newCard.filter((item) => item._id !== card._id));
-      })
-      .catch((err) => console.log(err));
-  }
-
-
-  function handleUpdateUser(userInfo) {
-    api
-      .setUserInfo(userInfo)
-      .then((newUser) => {
-        setCurrentUser(newUser);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
   function handleLogout() {
-    auth.logout()
+    mainApi
+      .logout()
       .then(() => {
         setLoggedIn(false);
-        navigate('/signin');
+        navigate('/');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
   }
 
-  function handleClickMenuOpen() {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  function updateUserProfile({ name, email }) {
+    mainApi
+      .updateUser({ name, email })
+      .then(({ name, email }) => {
+        // const {email, name} = newUser
+        setCurrentUser({ name, email })
+        setIsSuccess(true)
+      })
+      .catch((err) => {
+        console.log(err)
+        setIsSuccess(false)
+      })
   }
 
+  function handleMovieDelete(movie) {
+    mainApi
+      .deleteMovie(movie._id)
+      .then(() => {
+        setSavedMoviesList((state) => state.filter((item) => item._id !== movie._id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-  };
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(true);
-  };
-  const handleCardClick = (card) => {
-    setSelectedCard(card);
-  };
+  function handleMovieLike(movie) {
+    mainApi
+      .addNewMovie(movie)
+      .then((data) => {
+        const newMovie = data;
+        setSavedMoviesList([newMovie, ...savedMoviesList]);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  }
+
+  function handleMenuOpen() {
+    setIsMobileMenuOpen(true)
+  }
 
   function closeAllPopups() {
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setSelectedCard({});
-    setIsInfoTooltipOpen(false);
-  }
-
-  const [menuOpened, setMenuOpened] = useState(false)
-  const closeMenuPopup = () => {
-    setMenuOpened(false)
+    setIsMobileMenuOpen(false)
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="App">
+      <Header
+        isOpen={isMobileMenuOpen}
+        onMenuOpen={handleMenuOpen}
+        onClose={closeAllPopups}
+        loggedIn={loggedIn}
+      />
       <Routes>
         <Route
           path="/"
           element={<Main />}
         />
-        <ProtectedRoute
+        <Route
           path="/movies"
-          element={<Movies
-            setMenuOpened={setMenuOpened}
-            menuOpened={menuOpened}
-            menuClosed={closeMenuPopup}
-
-          />}
+          element={
+          <Movies
+            // element={Movies}
+            movies={movies}
+            savedMoviesList={savedMoviesList}
+            onCardSave={handleMovieLike}
+          />
+        }
         />
-        <ProtectedRoute
+        <Route
           path="/saved-movies"
-          element={<SavedMovies
-            setMenuOpened={setMenuOpened}
-            menuOpened={menuOpened}
-            menuClosed={closeMenuPopup}
+          element={
+          <SavedMovies
+            // element={SavedMovies}
+            movies={movies}
+            savedMoviesList={savedMoviesList}
+            onCardSave={handleMovieLike}
+            onCardDelete={handleMovieDelete}
           />}
         />
-        <ProtectedRoute
+        <Route
           path="/profile"
-          element={<Profile
-            setMenuOpened={setMenuOpened}
-            menuOpened={menuOpened}
-            menuClosed={closeMenuPopup}
+          element={
+            <Profile
+              // element={Profile}
+              onSignOut={handleLogout}
+              onUpdateUser={updateUserProfile}
           />}
         />
         <Route
           path="/signup"
-          element={<Register />}
+          element=
+            {<Register
+              onRegister={handleRegister}
+            />}
         />
         <Route
           path="/signin"
-          element={<Login />}
+          element=
+            {<Login
+              onLogin={handleLogin}
+            />}
         />
         <Route
           path="*"

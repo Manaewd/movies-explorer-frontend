@@ -1,26 +1,30 @@
 import React, { useState } from "react";
-
+import { Link } from 'react-router-dom';
+import { EMAIL } from '../../utils/constants'
 import './Login.css';
 import Logo from '../images/logo.svg';
-import { Link } from 'react-router-dom';
+import Validation from '../../hooks/useFormAndValidation';
 
 export default function Login({ onLogin }) {
+    const { values, errors, isValid, handleChange } = Validation();
+    const [disabled, setDisabled] = useState(false);
+    const [errorMessage, setErrorMessage,] = useState('');
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    function handleInputChange(evt) {
+        handleChange(evt);
+        cleanErrorMessage();
+      }
+    
+      function cleanErrorMessage() {
+        setErrorMessage('');
+      }
   
-    function handleEmailChange(e){
-      setEmail(e.target.value)
-    }
-  
-    function handlePasswordChange(e){
-      setPassword(e.target.value)
-    }
-  
-    function handleSubmit(e) {
-      e.preventDefault()
-  
-      onLogin({email, password})
+    function handleSubmit(evt) {
+        evt.preventDefault()
+      onLogin({ email: values.email, password: values.password,
+      })
+      setTimeout(() => { setDisabled(false);
+      }, 2000);
     }
 
     return (
@@ -35,7 +39,7 @@ export default function Login({ onLogin }) {
                         <li className='form__section'>
                             <label className='form__input-title' htmlFor='email-login-input'>E-mail</label>
                             <input
-                                onChange={handleEmailChange}
+                                onChange={handleInputChange}
                                 className='form__input form__input_type_email'
                                 id='email-login-input'
                                 type='email'
@@ -43,27 +47,36 @@ export default function Login({ onLogin }) {
                                 minLength='2'
                                 maxLength='40'
                                 placeholder="Электронная почта"
+                                pattern={EMAIL}
+                                value={values.email || ''}
+                                disabled={disabled}
                                 required
                             />
-                            <p className='form__input-error'/>
+                            <span className='form__input-error'>
+                                {errors.email}
+                            </span>
                         </li>
                         <li className='form__section'>
                             <label className='form__input-title' htmlFor='password-login-input'>Пароль</label>
                             <input
-                                onChange={handlePasswordChange}
+                                onChange={handleInputChange}
                                 className='form__input form__input_type_password'
                                 id='password-login-input'
                                 type='password'
                                 name='password'
-                                minLength='8'
+                                minLength='5'
                                 maxLength='40'
                                 placeholder="Пароль"
+                                disabled={disabled}
                                 required
                             />
-                            <p className='form__input-error'/>
+                            <span className='form__input-error'>
+                                {errors.password}
+                            </span>
+                            <p className={`auth__error-message ${errorMessage && 'auth__error-message_visible'}`}>{errorMessage}</p>
                         </li>
                     </ul>
-                    <button className='login__enter form__enter interactive-button' type='submit' aria-label='Войти в свой аккаунт'>
+                    <button className={`login__enter ${!isValid && 'form__enter interactive-button'}`} type='submit' aria-label='Войти в свой аккаунт'>
                         Войти
                     </button>
                 </form>

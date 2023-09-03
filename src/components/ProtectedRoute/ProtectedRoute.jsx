@@ -1,13 +1,10 @@
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import React from 'react';
+import { Navigate } from "react-router-dom";
 
-export default function ProtectedRoute({ component: Component, ...props }) {
-  const { pathname } = useLocation()
+const ProtectedRoute = ({ element: Component, ...props }) => {
   return (
-    props.loggedIn ? (
-      Component ? <Component {...props} /> : null
-    ) : (
-      <Navigate to="/signin" state={{ backUrl: pathname }} />
-    )
+    props.loggedIn ? <Component {...props} /> : <Navigate to={"/"} replace />
   )
 }
+
+export default ProtectedRoute;
