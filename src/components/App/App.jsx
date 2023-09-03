@@ -10,6 +10,7 @@ import Profile from "../Profile/Profile";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -19,8 +20,7 @@ import moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
-
-  // const [isLoader, setIsLoader] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -46,6 +46,7 @@ function App() {
   }, [loggedIn]);
 
   function handleLogin({ email, password }) {
+    setIsLoader(true);
     mainApi
       .login({ email, password })
       .then(() => {
@@ -58,6 +59,7 @@ function App() {
   }
 
   function handleRegister({ name, email, password }) {
+    setIsLoader(true);
     mainApi
       .register({ name, email, password })
       .then(() => {
@@ -98,16 +100,19 @@ function App() {
   }
 
   function updateUserProfile({ name, email }) {
+    setIsLoader(true);
     mainApi
       .updateUser({ name, email })
       .then(({ name, email }) => {
         // const {email, name} = newUser
         setCurrentUser({ name, email })
         setIsSuccess(true)
+        setIsInfoTooltipOpen(true)
       })
       .catch((err) => {
         console.log(err)
         setIsSuccess(false)
+        setIsInfoTooltipOpen(true)
       })
   }
 
@@ -140,6 +145,7 @@ function App() {
 
   function closeAllPopups() {
     setIsMobileMenuOpen(false)
+    setIsInfoTooltipOpen(false)
   }
 
   return (
@@ -159,8 +165,8 @@ function App() {
         <Route
           path="/movies"
           element={
-          <Movies
-            // element={Movies}
+          <ProtectedRoute loggedIn={loggedIn}
+            element={Movies}
             movies={movies}
             savedMoviesList={savedMoviesList}
             onCardSave={handleMovieLike}
@@ -170,8 +176,8 @@ function App() {
         <Route
           path="/saved-movies"
           element={
-          <SavedMovies
-            // element={SavedMovies}
+          <ProtectedRoute loggedIn={loggedIn}
+            element={SavedMovies}
             movies={movies}
             savedMoviesList={savedMoviesList}
             onCardSave={handleMovieLike}
@@ -181,8 +187,9 @@ function App() {
         <Route
           path="/profile"
           element={
-            <Profile
-              // element={Profile}
+            <ProtectedRoute loggedIn={loggedIn}
+              element={Profile}
+              isLoader={isLoader}
               onSignOut={handleLogout}
               onUpdateUser={updateUserProfile}
           />}
@@ -192,6 +199,7 @@ function App() {
           element=
             {<Register
               onRegister={handleRegister}
+              isLoader={isLoader}
             />}
         />
         <Route
@@ -206,6 +214,15 @@ function App() {
           element={<PageNotFound />}
         />
       </Routes>
+
+      <InfoTooltip
+        name={"success"}
+        isSuccess={isSuccess}
+        isOpen={isInfoTooltipOpen}
+        onClose={closeAllPopups}
+        textIsSuccessTrue={"Успешно!"}
+        textIsSuccessFalse={"Что-то пошло не так! Попробуйте ещё раз."}
+      />
     </div>
     </CurrentUserContext.Provider>
   );

@@ -12,6 +12,11 @@
   padding: 0;
 }
 
+.movie-card__link {
+  margin: 0;
+  padding: 0;
+}
+
 .movie-card__info {
   justify-content: space-between;
   display: flex;

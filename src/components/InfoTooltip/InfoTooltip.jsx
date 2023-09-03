@@ -1,6 +1,6 @@
 import "./InfoTooltip.css";
-import resolve from "../../images/info-resolve.svg";
-import reject from "../../images/info-reject.svg";
+import resolve from "../../components/images/icon-info_resolve.svg";
+import reject from "../../components/images/icon-info_reject.svg";
 
 function InfoTooltip({ isOpen, onClose, isSuccess, textIsSuccessTrue, textIsSuccessFalse }) {
 

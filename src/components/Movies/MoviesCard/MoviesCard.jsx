@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../../utils/constants'
 import "./MoviesCard.css";
 
@@ -35,11 +36,17 @@ export default function MoviesCard({
 
 return (
   <li className='movie-card'>
-    <img
-      src={isSaved ? movie.image : `${BASE_URL}${movie.image.url}`}
-      alt={`фотокарточка фильма ${movie.nameRU}`}
-      className='movie-card__img'
+    <Link
+        className='movie-card__link'
+        to={`${movie.trailerLink}`}
+        target='_blank'
+    >
+      <img
+        src={isSaved ? movie.image : `${BASE_URL}${movie.image.url}`}
+        alt={`фотокарточка фильма ${movie.nameRU}`}
+        className='movie-card__img'
     />
+    </Link>
       <div className='movie-card__container'>
         <div className="movie-card__info">
         <h2 className='movie-card__title'>{movie.nameRU}</h2>
