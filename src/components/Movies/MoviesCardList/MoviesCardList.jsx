@@ -8,7 +8,10 @@ import {
   SCREEN_MIDDLE,
   DESKTOP_MOVIES,
   TAB_MOVIES,
-  MOBILE_MOVIES
+  MOBILE_MOVIES,
+  DESKTOP_ADDITIONAL_MOVIES,
+  TAB_ADDITIONAL_MOVIES,
+  MOBILE_ADDITIONAL_MOVIES,
 } from '../../../utils/constants'
 
 export default function MoviesCardList({ movies, savedMoviesList, onCardSave, onCardDelete, isSaved }) {
@@ -47,11 +50,11 @@ export default function MoviesCardList({ movies, savedMoviesList, onCardSave, on
 
   const loadMovies = () => {
     if (window.innerWidth >= SCREEN_LARGE) {
-      setCardsToShow(prevCards => prevCards + DESKTOP_MOVIES);
+      setCardsToShow(prevCards => prevCards + DESKTOP_ADDITIONAL_MOVIES);
     } else if (window.innerWidth >= SCREEN_MIDDLE) {
-      setCardsToShow(prevCards => prevCards + TAB_MOVIES);
+      setCardsToShow(prevCards => prevCards + TAB_ADDITIONAL_MOVIES);
     } else {
-      setCardsToShow(prevCards => prevCards + MOBILE_MOVIES);
+      setCardsToShow(prevCards => prevCards + MOBILE_ADDITIONAL_MOVIES);
     }
   };
 
