@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 
 // import NavTab from "../Main/NavTab/NavTab";
@@ -60,31 +60,37 @@ function Profile({ onSignOut, onUpdateUser }) {
       <div className="profile__content">
         <h1 className="profile__title">{`Привет, ${currentUser.name || ''}!`}</h1>
         <form
-          className="profile__inputs"
+          className="profile__form"
           id='submit'
           name='profile'
           onSubmit={handleSubmitProfile}
+        >
+        <div
+          className='profile__inputs'
         >
           <label className="profile__input-label">
             Имя
             <input
               type="text"
               className="profile__input"
-              placeholder="Виталий"
               name="name"
-              minLength='2'
-              maxLength='40'
+              placeholder="Введите имя"
+              minLength={2}
+              maxLength={30}
               value={values.name || ""}
               onChange={handleInputsChange}
               required
             />
           </label>
+          <span className='profile__input-error profile__input-error_name'>{errors.name}</span>
           <label className="profile__input-label">
             E-mail
             <input
               type="email"
+              placeholder="Введите email"
+              minLength={2}
+              maxLength={30}
               className="profile__input"
-              placeholder="pochta@yandex.ru"
               name="email"
               value={values.email || ""}
               onChange={handleInputsChange}
@@ -92,12 +98,19 @@ function Profile({ onSignOut, onUpdateUser }) {
               disabled={disabled}
             />
           </label>
-        </form>
+          <span className='profile__input-error profile__input-error_email'>{errors.email}</span>
+        </div>
         <div className="profile__btn-container">
-          <Link to="/profile" disabled={handleRequiredCondition} className="profile__btn">Редактировать</Link>
+          <button
+            type='submit'
+            disabled={handleRequiredCondition} className="profile__btn"
+          >
+            Редактировать
+          </button>
           <Link to="/" className="profile__btn profile__btn_red" onClick={onSignOut}>Выйти из аккаунта</Link>
         </div>
         {/* <SideBar isOpened={menuOpened} menuClosed={menuClosed} /> */}
+        </form>
       </div>
     </section>
     </main>

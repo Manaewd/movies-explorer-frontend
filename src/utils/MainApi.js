@@ -44,14 +44,14 @@ class MainApi {
     }
 
     // - Метот передачи данных пользователя на сервер
-    setUserInfo({ name, email }) {
-        return fetch(`${this._url}/users/me`, {
+    updateUser({ name, email }) {
+        return fetch(`${this._baseUrl}/users/me`, {
           method: 'PATCH',
           credentials: 'include',
           headers: this._headers,
           body: JSON.stringify({
-            name: name,
-            about: email,
+            name,
+            email,
           }) 
         })
         .then(res => this._checkResponse(res))

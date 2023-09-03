@@ -3,6 +3,11 @@
   width: 100%;
 }
 
+.profile__form {
+  margin: 0;
+  padding: 0;
+}
+
 .profile__content {
   display: flex;
   flex-direction: column;
@@ -23,7 +28,7 @@
   align-items: center;
 }
 
-.:hover {
+.profile__btn-container:hover {
   opacity: 0.8;
 }
 

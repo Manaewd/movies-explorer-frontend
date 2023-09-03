@@ -19,14 +19,15 @@ import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
   const [isLoader, setIsLoader] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [savedMoviesList, setSavedMoviesList] = useState([]);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,6 +116,8 @@ function App() {
         setIsSuccess(false)
         setIsInfoTooltipOpen(true)
       })
+      .finally(() =>
+        setIsLoader(false));
   }
 
   function handleMovieDelete(movie) {
@@ -190,7 +193,6 @@ function App() {
           element={
             <ProtectedRoute loggedIn={loggedIn}
               element={Profile}
-              isLoader={isLoader}
               onSignOut={handleLogout}
               onUpdateUser={updateUserProfile}
           />}
@@ -222,8 +224,8 @@ function App() {
         isSuccess={isSuccess}
         isOpen={isInfoTooltipOpen}
         onClose={closeAllPopups}
-        textIsSuccessTrue={"Успешно."}
-        textIsSuccessFalse={"Что-то пошло не так. Попробуйте ещё раз."}
+        textIsSuccessTrue={"Успешно"}
+        textIsSuccessFalse={"Во время запроса произошла ошибка"}
       />
     </div>
     </CurrentUserContext.Provider>
