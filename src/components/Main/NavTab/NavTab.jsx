@@ -1,11 +1,14 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import Sidebar from '../Sidebar/Sidebar';
 
 import "./NavTab.css";
-import Logo from "../images/logo.svg";
+import Logo from "../../images/logo.svg";
 
-function NavMenu({ isOpen, onClose, onMenuOpen }) {
+function NavMenu({ setIsOpened }) {
+
+  function handleOpen() {
+    setIsOpened(true);
+  }
 
   return (
     <nav className="navtab">
@@ -22,13 +25,9 @@ function NavMenu({ isOpen, onClose, onMenuOpen }) {
         <Link className="navtab__profile-link animation-btn" to="/profile">Аккаунт</Link>
       </div>
       <button className="navtab__burger"
-        onClick={onMenuOpen}
+        onClick={handleOpen}
         type="button"
       ></button>
-      <Sidebar
-        isOpen={isOpen}
-        onClose={onClose}
-      />
     </nav>
   );
 }

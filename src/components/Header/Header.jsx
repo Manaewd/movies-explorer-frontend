@@ -1,62 +1,18 @@
 import React from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
-import NavTab from '../NavTab/NavTab';
+import { Link } from 'react-router-dom'
 import Logo from '../../components/images/logo.svg'
 import './Header.css'
 
-export default function Header({ isLoggedIn, isOpen, onClose, onMenuOpen }) {
-
+export default function Header() {
   return (
-    <Routes>
-      <Route path='/' element={isLoggedIn ? (
-        <header className="header">
-            <NavTab
-              isOpen={isOpen}
-              onClose={onClose}
-              onMenuOpen={onMenuOpen}
-            />
-        </header>
-      ) : (
-        <header className="header">
-          <div className='header__main'>
-          <Link to='/'> <img src={Logo} alt="Логотип" className="header__logo" /></Link>
-          <nav className="header__menu">
-              <Link to='/signup' href="" className="header__register"> Регистрация</Link>
-              <Link to='/signin' className="header__login"> Войти</Link>
-          </nav>
-          </div>
-        </header>)
-      } />
-
-      <Route path='/movies' element={
-        <header className="header">
-            <NavTab
-              isOpen={isOpen}
-              onClose={onClose}
-              onMenuOpen={onMenuOpen}
-            />
-        </header>
-      } />
-
-      <Route path='/saved-movies' element={
-        <header className="header">
-            <NavTab
-              isOpen={isOpen}
-              onMenuOpen={onMenuOpen}
-              onClose={onClose}
-            />
-        </header>
-      } />
-
-      <Route path='/profile' element={
-        <header className="header">
-            <NavTab
-              isOpen={isOpen}
-              onMenuOpen={onMenuOpen}
-              onClose={onClose}
-            />
-        </header>
-      } />
-    </Routes >
-  );
-};
+   <header className='header'>
+            <Link to='/'>
+                <img className='header__logo' src={Logo} alt='логотип'></img>
+            </Link>
+            <nav className='header__menu'>
+                <Link className='header__register animation-link' to='/signup'>Регистрация</Link>
+                <Link className='header__login animation-btn' to='/signin'>Войти</Link>
+            </nav>
+   </header>
+  )
+}

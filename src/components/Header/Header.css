@@ -1,14 +1,9 @@
 .header {
-    margin: 0 auto;
-    width: 100%;
-}
-
-.header__main {
-    background: #073042;
     padding: 20px 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #073042;
 }
 
 .header__register {
@@ -53,15 +48,14 @@
     opacity: 0.8;
 }
 @media screen and (max-width: 769px) {
-   .header__main {
-    padding: 20px 30px;
-}
-
+    .header {
+        padding: 20px 30px;
+   }
 }
 @media screen and (max-width: 451px) {
-   .header__main {
+    .header {
         padding: 20px 14px;
-}
+   }
     .header__menu {
         gap: 15px;
    }
@@ -75,3 +69,15 @@
         line-height: 1.6;
    }
 }
+
+/* @keyframes move {
+    0% {
+        transform: rotateZ(0deg);
+   }
+    50% {
+        transform: rotateZ(180deg);
+   }
+    100% {
+        transform: rotateZ(360deg);
+   }
+} */
