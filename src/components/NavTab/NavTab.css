@@ -57,7 +57,7 @@
 }
 
 .navtab__profile-link::before {
-  background-image: url(../../images/icon-profile.svg);
+  background-image: url(../images/icon-profile.svg);
   border-radius: 50px ;
   background-color: #F9F9F9;
   background-repeat: no-repeat;

@@ -1,37 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
-import "./Movies.css";
+import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import SearchForm from "./SearchForm/SearchForm";
 import Footer from "../Footer/Footer";
-import MoviesCard from "./MoviesCard/MoviesCard";
-import { initialMovies } from "../../utils/Data";
-import NavTab from "../Main/NavTab/NavTab";
-import SideBar from "../SideBar/SideBar";
+import "./Movies.css";
 
-export default function Movies({ setMenuOpened, menuOpened, menuClosed }) {
+export default function Movies({
+  movies,
+  savedMoviesList,
+  onCardSave,
+  onCardDelete,
+}) {
+  const [checkMovies, setCheckMovies] = useState([]);
+
+  const searchMovies = (checkMovies) => {
+    setCheckMovies(checkMovies);
+  };
+
   return (
     <>
       <main className="movies">
-        <NavTab setIsOpened={setMenuOpened} />
-        <SearchForm />
-        <ul className="movies__items">
-          {initialMovies.map((movie) => {
-            return (
-              <MoviesCard
-                  key={movie.id}
-                  title={movie.title}
-                  duration={movie.duration}
-                  image={movie.image}
-                  block="general"
-                />
-              );
-            })}
-          </ul>
-          <button type="button" className="movies__button" aria-label="Еще фильмы">
-            Ещё
-          </button>
+        <SearchForm
+          onSearch={searchMovies}
+          movies={movies}
+          savedMoviesList={savedMoviesList}
+        />
+        <MoviesCardList
+          movies={checkMovies.length > 0 ? checkMovies : movies}
+          savedMoviesList={
+            checkMovies.length > 0 ? checkMovies : savedMoviesList
+          }
+          onCardSave={onCardSave}
+          isSaved={false}
+          onCardDelete={onCardDelete}
+        />
       </main>
-      <SideBar isOpened={menuOpened} menuClosed={menuClosed} />
       <Footer />
     </>
   );
