@@ -46,7 +46,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [loggedIn]);
+  }, [loggedIn])
 
   function handleLogin({ email, password }) {
     setIsLoader(true);
