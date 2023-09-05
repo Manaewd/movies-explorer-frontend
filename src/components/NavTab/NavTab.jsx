@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./NavTab.css";
 import Logo from "../images/logo.svg";
-import Sidebar from "../Sidebar/Sidebar";
+import BurgerMenu from "../BurgerMenu/BurgerMenu"
 
 function NavMenu({ isOpen, onClose, onMenuOpen }) {
 
@@ -23,7 +23,7 @@ function NavMenu({ isOpen, onClose, onMenuOpen }) {
         onClick={onMenuOpen}
         type="button"
       ></button>
-      <Sidebar
+      <BurgerMenu
         isOpen={isOpen}
         onClose={onClose}
       />
