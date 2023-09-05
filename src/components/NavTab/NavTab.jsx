@@ -1,6 +1,5 @@
-import React from "react";
-import { NavLink, Link } from "react-router-dom";
-import Sidebar from '../Sidebar/Sidebar';
+import { Link } from "react-router-dom";
+import Sidebar from '../Sidebar/SideBar';
 
 import "./NavTab.css";
 import Logo from "../images/logo.svg";
@@ -13,10 +12,10 @@ function NavMenu({ isOpen, onClose, onMenuOpen }) {
         <img src={Logo} alt="Логотип" />
       </Link>
       <div className="navtab__links">
-        <NavLink className="navtab__link" to="/movies">Фильмы</NavLink>
-        <NavLink className="navtab__link" to="/saved-movies">
+        <Link className="navtab__link" to="/movies">Фильмы</Link>
+        <Link className="navtab__link" to="/saved-movies">
           Сохранённые фильмы
-        </NavLink>
+        </Link>
       </div>
       <div className="navtab__profile">
         <Link className="navtab__profile-link animation-btn" to="/profile">Аккаунт</Link>
