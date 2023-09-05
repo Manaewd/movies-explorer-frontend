@@ -1,6 +1,7 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-import "./Sidebar.css";
+import "./SideBar.css";
 import closeButton from "../images/icon-close-menu.svg";
 
 export default function SideBar({ isOpen, onClose }) {
