@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "./BurgerMenu.css";
+import "./Sidebar.css";
 import closeButton from "../images/icon-close-menu.svg";
 
-export default function BurgerMenu({ isOpen, onClose }) {
+export default function Sidebar({ isOpen, onClose }) {
   return (
     <>
       <div className={isOpen ? "sidebar" : " sidebar sidebar_hidden"}>
