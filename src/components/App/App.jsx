@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 
 import "./App.css";
 import Header from "../Header/Header";
@@ -11,6 +11,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
@@ -173,7 +174,8 @@ function App() {
           <Route
             path="/movies"
             element={
-              <Movies
+              <ProtectedRouteElement
+                element={Movies}
                 movies={movies}
                 savedMoviesList={savedMoviesList}
                 onCardSave={handleMovieLike}
@@ -184,7 +186,8 @@ function App() {
           <Route
             path="/saved-movies"
             element={
-              <SavedMovies
+              <ProtectedRouteElement
+                element={SavedMovies}
                 movies={movies}
                 savedMoviesList={savedMoviesList}
                 onCardSave={handleMovieLike}
@@ -195,7 +198,8 @@ function App() {
           <Route
             path="/profile"
             element={
-              <Profile
+              <ProtectedRouteElement
+                element={Profile}
                 onSignOut={handleLogout}
                 onUpdateUser={updateUserProfile}
                 isLoader={isLoader}
@@ -212,7 +216,11 @@ function App() {
             path="/signin"
             element={<Login onLogin={handleLogin} isLoader={isLoader} />}
           />
-          <Route path="*" element={<PageNotFound />} />
+          <Route
+              path='/404'
+              element={<PageNotFound />}
+            />
+          <Route path="*" element={<Navigate to='/404' replace />} />
         </Routes>
 
         <InfoTooltip
