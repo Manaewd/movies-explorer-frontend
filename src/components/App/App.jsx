@@ -55,7 +55,7 @@ function App() {
       .login({ email, password })
       .then(() => {
         setLoggedIn(true);
-        navigate("/movies");
+        navigate("/movies", { replace: true });
         setIsSuccess(true);
       })
       .catch((err) => {
@@ -70,7 +70,7 @@ function App() {
       .register({ name, email, password })
       .then(() => {
         setLoggedIn(true);
-        navigate("/movies", { replace: true });
+        navigate("/movies");
         setIsSuccess(true);
       })
       .catch((err) => {
@@ -109,7 +109,6 @@ function App() {
     mainApi
       .updateUser({ name, email })
       .then(({ name, email }) => {
-        // const {email, name} = newUser
         setCurrentUser({ name, email });
         setIsSuccess(true);
         setIsInfoTooltipOpen(true);
@@ -174,36 +173,39 @@ function App() {
           <Route
             path="/movies"
             element={
-              <ProtectedRouteElement
-                element={Movies}
-                movies={movies}
-                savedMoviesList={savedMoviesList}
-                onCardSave={handleMovieLike}
-                onCardDelete={handleMovieDelete}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <Movies
+                  movies={movies}
+                  savedMoviesList={savedMoviesList}
+                  onCardSave={handleMovieLike}
+                  onCardDelete={handleMovieDelete}
+                />
+            </ProtectedRouteElement>    
             }
           />
           <Route
             path="/saved-movies"
             element={
-              <ProtectedRouteElement
-                element={SavedMovies}
-                movies={movies}
-                savedMoviesList={savedMoviesList}
-                onCardSave={handleMovieLike}
-                onCardDelete={handleMovieDelete}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <SavedMovies
+                  movies={movies}
+                  savedMoviesList={savedMoviesList}
+                  onCardSave={handleMovieLike}
+                  onCardDelete={handleMovieDelete}
+                />
+              </ProtectedRouteElement>           
             }
           />
           <Route
             path="/profile"
             element={
-              <ProtectedRouteElement
-                element={Profile}
-                onSignOut={handleLogout}
-                onUpdateUser={updateUserProfile}
-                isLoader={isLoader}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <Profile
+                  onSignOut={handleLogout}
+                  onUpdateUser={updateUserProfile}
+                  isLoader={isLoader}
+                />
+            </ProtectedRouteElement>     
             }
           />
           <Route
