@@ -124,11 +124,11 @@ function App() {
     setLoggedIn(false);
   }
 
-  function updateUserProfile(movie) {
+  function updateUserProfile(data) {
     setErrorMessage("");
     setSuccessMessage("");
     mainApi
-      .updateUser(movie)
+      .updateUser(data)
       .then((value) => {
         setErrorMessage("Изменения сохранены.");
         setCurrentUser(value);
