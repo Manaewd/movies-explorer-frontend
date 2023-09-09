@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import Header from "../Header/Header";
@@ -20,34 +20,57 @@ import moviesApi from "../../utils/MoviesApi";
 
 function App() {
   const [isLoader, setIsLoader] = useState(false);
+
   const [isSuccess, setIsSuccess] = useState(false);
+  
   const [currentUser, setCurrentUser] = useState({});
+
   const [loggedIn, setLoggedIn] = useState(false);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+
   const [movies, setMovies] = useState([]);
+
   const [savedMoviesList, setSavedMoviesList] = useState([]);
 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
 
   useEffect(() => {
-    tokenCheck();
-    if (loggedIn) {
+    setIsLoader(true);
       Promise.all([
         mainApi.getUserInfo(),
         moviesApi.getMovies(),
-        mainApi.getSavedMovies(),
       ])
         .then((result) => {
-          const [userData, moviesData, moviesSavedData] = result;
+          const [userData, moviesData] = result;
           setCurrentUser(userData);
           setMovies(moviesData);
-          setSavedMoviesList(moviesSavedData);
-          navigate("/movies");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setIsLoader(false));
+  }, [loggedIn]);
+
+  function tokenCheck() {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      mainApi
+      .checkToken(jwt)
+      .then((data) => {
+        setCurrentUser(data)
+        setLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
     }
-  }, [loggedIn])
+  }
 
   function handleLogin({ email, password }) {
     setIsLoader(true);
@@ -80,17 +103,7 @@ function App() {
       .finally(() => setIsInfoTooltipOpen(true));
   }
 
-  function tokenCheck() {
-    mainApi
-      .checkToken()
-      .then(() => {
-        setLoggedIn(true);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-  }
+
 
   function handleLogout() {
     mainApi
@@ -219,10 +232,9 @@ function App() {
             element={<Login onLogin={handleLogin} isLoader={isLoader} />}
           />
           <Route
-              path='/404'
+              path="*"
               element={<PageNotFound />}
             />
-          <Route path="*" element={<Navigate to='/404' replace />} />
         </Routes>
 
         <InfoTooltip
