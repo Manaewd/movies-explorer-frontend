@@ -1,30 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { EMAIL } from "../../utils/constants";
 import "./Login.css";
 import Logo from "../images/logo.svg";
 import Validation from "../../hooks/useFormAndValidation";
 
-export default function Login({ onLogin }) {
-  const { values, errors, isValid, handleChange } = Validation();
-  const [disabled, setDisabled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+export default function Login({ onLogin, errorMessage }) {
+  const { values, handleChange, errors, isValid, resetForm } = Validation();
+  // const [disabled, setDisabled] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState("");
 
-  function handleInputChange(evt) {
-    handleChange(evt);
-    cleanErrorMessage();
-  }
+  // function handleInputChange(evt) {
+  //   handleChange(evt);
+  //   cleanErrorMessage();
+  // }
 
-  function cleanErrorMessage() {
-    setErrorMessage("");
-  }
+  // function cleanErrorMessage() {
+  //   setErrorMessage("");
+  // }
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onLogin({ email: values.email, password: values.password });
-    setTimeout(() => {
-      setDisabled(false);
-    }, 2000);
+    console.log(isValid)
+    if(isValid){
+      const {email, password}=values;
+      onLogin(email, password);
+      }
+      resetForm();
   }
 
   return (
@@ -38,14 +40,14 @@ export default function Login({ onLogin }) {
           />
         </Link>
         <h1 className="form__title">Рады видеть!</h1>
-        <form className="form__content" onSubmit={handleSubmit}>
+        <form className="form__content" isValid={isValid} onSubmit={handleSubmit} errorMessage={errorMessage}>
           <ul className="form__sections">
             <li className="form__section">
               <label className="form__input-title" htmlFor="email-login-input">
                 E-mail
               </label>
               <input
-                onChange={handleInputChange}
+                onChange={handleChange}
                 className="form__input form__input_type_email"
                 id="email-login-input"
                 type="email"
@@ -55,7 +57,6 @@ export default function Login({ onLogin }) {
                 placeholder="Электронная почта"
                 pattern={EMAIL}
                 value={values.email || ""}
-                disabled={disabled}
                 required
               />
               <span className="form__input-error">{errors.email}</span>
@@ -68,7 +69,7 @@ export default function Login({ onLogin }) {
                 Пароль
               </label>
               <input
-                onChange={handleInputChange}
+                onChange={handleChange}
                 className="form__input form__input_type_password"
                 id="password-login-input"
                 type="password"
@@ -76,7 +77,7 @@ export default function Login({ onLogin }) {
                 minLength="5"
                 maxLength="40"
                 placeholder="Пароль"
-                disabled={disabled}
+                value={values.password || ""}
                 required
               />
               <span className="form__input-error">{errors.password}</span>

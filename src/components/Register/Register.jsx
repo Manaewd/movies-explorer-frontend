@@ -1,34 +1,20 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Validation from "../../hooks/useFormAndValidation";
 import { NAME, EMAIL } from "../../utils/constants";
 import Logo from "../images/logo.svg";
 
-export default function Register({ onRegister }) {
-  const { values, errors, isValid, handleChange } = Validation();
-  const [disabled, setDisabled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+export default function Register({ onRegister, errorMessage }) {
+  const { values, handleChange, isValid, errors, resetForm } = Validation();
 
-  function handleInputChange(evt) {
-    handleChange(evt);
-    cleanErrorMessage();
-  }
-
-  function cleanErrorMessage() {
-    setErrorMessage("");
-  }
-
-  function handleSubmit(evt) {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
-    onRegister({
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    });
-    setTimeout(() => {
-      setDisabled(false);
-    }, 2000);
-  }
+    evt.stopPropagation();
+    if (isValid) {
+      const { name, email, password } = values;
+      onRegister(name, email, password);
+    }
+    resetForm();
+  };
 
   return (
     <main className="register form">
@@ -41,7 +27,7 @@ export default function Register({ onRegister }) {
           />
         </Link>
         <h1 className="form__title">Добро пожаловать!</h1>
-        <form className="form__content" onSubmit={handleSubmit}>
+        <form className="form__content" isValid={isValid} onSubmit={handleSubmit} errorMessage={errorMessage}>
           <ul className="form__sections">
             <li className="form__section">
               <label
@@ -59,10 +45,9 @@ export default function Register({ onRegister }) {
                 maxLength="40"
                 placeholder="Имя пользователя"
                 value={values.name || ""}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 pattern={NAME}
                 required
-                disabled={disabled}
               />
               <p className="form__input-error">{errors.name}</p>
             </li>
@@ -74,7 +59,7 @@ export default function Register({ onRegister }) {
                 E-mail
               </label>
               <input
-                onChange={handleInputChange}
+                onChange={handleChange}
                 type="email"
                 className="form__input form__input_types_email"
                 id="email-register-input"
@@ -85,7 +70,6 @@ export default function Register({ onRegister }) {
                 placeholder="Электронная почта"
                 pattern={EMAIL}
                 required
-                disabled={disabled}
               />
               <p className="form__input-error">{errors.email}</p>
             </li>
@@ -97,7 +81,7 @@ export default function Register({ onRegister }) {
                 Пароль
               </label>
               <input
-                onChange={handleInputChange}
+                onChange={handleChange}
                 className="form__input form__input_type_password"
                 id="password-register-input"
                 type="password"
@@ -107,7 +91,6 @@ export default function Register({ onRegister }) {
                 value={values.password || ""}
                 placeholder="Пароль"
                 required
-                disabled={disabled}
               />
               <span className="form__input-error">{errors.password}</span>
               <p

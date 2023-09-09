@@ -15,7 +15,7 @@ class MainApi {
     return Promise.reject(`Что-то пошло не так... Ошибка: ${res.status}`);
   }
 
-  register({ name, email, password }) {
+  register( name, email, password ) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       credentials: "include",
@@ -24,7 +24,7 @@ class MainApi {
     }).then((res) => this._checkResponse(res));
   }
 
-  login({ email, password }) {
+  login( email, password ) {
     return fetch(`${this._baseUrl}/signin`, {
       method: "POST",
       credentials: "include",

@@ -20,18 +20,13 @@ import moviesApi from "../../utils/MoviesApi";
 
 function App() {
   const [isLoader, setIsLoader] = useState(false);
-
-  const [isSuccess, setIsSuccess] = useState(false);
   
   const [currentUser, setCurrentUser] = useState({});
-
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
-
-  const [movies, setMovies] = useState([]);
 
   const [savedMoviesList, setSavedMoviesList] = useState([]);
 
@@ -43,6 +38,18 @@ function App() {
   const path = location.pathname;
 
   useEffect(() => {
+    tokenCheck();
+    navigate(path);
+  }, []);
+
+  useEffect(() => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    tokenCheck();
+    console.log(path);
+  }, [path]);
+
+  useEffect(() => {
     setIsLoader(true);
       Promise.all([
         mainApi.getUserInfo(),
@@ -51,7 +58,7 @@ function App() {
         .then((result) => {
           const [userData, moviesData] = result;
           setCurrentUser(userData);
-          setMovies(moviesData);
+          setSavedMoviesList(moviesData);
         })
         .catch((err) => console.log(err))
         .finally(() => setIsLoader(false));
@@ -72,67 +79,65 @@ function App() {
     }
   }
 
-  function handleLogin({ email, password }) {
+  function handleLogin( email, password ) {
+    setErrorMessage("");
+    mainApi
+      .login( email, password )
+      .then((data) => {
+        console.log(data);
+        if (data.token) {
+          setLoggedIn(true);
+          localStorage.setItem("jwt", data.token);
+          console.log(data.token);
+          setCurrentUser(data);
+          navigate("/movies", { replace: true });
+        }
+      })
+      .catch((err) => {
+        setErrorMessage(err);
+        console.log(err);
+      })
+      .finally(() => setIsInfoTooltipOpen(true));
+  }
+
+  function handleRegister( name, email, password ) {
+    setErrorMessage("");
     setIsLoader(true);
     mainApi
-      .login({ email, password })
+      .register( name, email, password )
       .then(() => {
+        handleLogin(email, password)
         setLoggedIn(true);
         navigate("/movies", { replace: true });
-        setIsSuccess(true);
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        setErrorMessage(err);
+        console.log(err);
       })
       .finally(() => setIsInfoTooltipOpen(true));
   }
-
-  function handleRegister({ name, email, password }) {
-    setIsLoader(true);
-    mainApi
-      .register({ name, email, password })
-      .then(() => {
-        setLoggedIn(true);
-        navigate("/movies");
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        setIsSuccess(false);
-        console.log(`Ошибка: ${err}`);
-      })
-      .finally(() => setIsInfoTooltipOpen(true));
-  }
-
-
 
   function handleLogout() {
-    mainApi
-      .logout()
-      .then(() => {
-        setLoggedIn(false);
-        navigate("/", { replace: true });
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
+    localStorage.removeItem("jwt");
+    localStorage.clear();
+    navigate("/", { replace: true });
+    setLoggedIn(false);
   }
 
-  function updateUserProfile({ name, email }) {
-    setIsLoader(true);
+  function updateUserProfile(movie) {
+    setErrorMessage("");
+    setSuccessMessage("");
     mainApi
-      .updateUser({ name, email })
-      .then(({ name, email }) => {
-        setCurrentUser({ name, email });
-        setIsSuccess(true);
-        setIsInfoTooltipOpen(true);
-        navigate("/profile");
+      .updateUser(movie)
+      .then((value) => {
+        setErrorMessage("Изменения сохранены.");
+        setCurrentUser(value);
       })
       .catch((err) => {
+        setErrorMessage(err);
         console.log(err);
-        setIsSuccess(false);
-        setIsInfoTooltipOpen(true);
       })
-      .finally(() => setIsLoader(false));
+      .finally(() => {});
   }
 
   function handleMovieDelete(movie) {
@@ -163,73 +168,62 @@ function App() {
       });
   }
 
-  function handleMenuOpen() {
-    setIsMobileMenuOpen(true);
-  }
-
-  function closeAllPopups() {
-    setIsMobileMenuOpen(false);
-    setIsInfoTooltipOpen(false);
-  }
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Header
           isOpen={isMobileMenuOpen}
-          onMenuOpen={handleMenuOpen}
-          onClose={closeAllPopups}
           loggedIn={loggedIn}
         />
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Main loggedIn={loggedIn} />} />
           <Route
             path="/movies"
             element={
-              <ProtectedRouteElement loggedIn={loggedIn}>
-                <Movies
-                  movies={movies}
-                  savedMoviesList={savedMoviesList}
-                  onCardSave={handleMovieLike}
-                  onCardDelete={handleMovieDelete}
-                />
-            </ProtectedRouteElement>    
+              <ProtectedRouteElement
+                loggedIn={loggedIn}
+                element={Movies}
+                isLoader={isLoader}
+                savedMoviesList={savedMoviesList}
+                onCardSave={handleMovieLike}
+                onCardDelete={handleMovieDelete}
+            />    
             }
           />
           <Route
             path="/saved-movies"
             element={
-              <ProtectedRouteElement loggedIn={loggedIn}>
-                <SavedMovies
-                  movies={movies}
-                  savedMoviesList={savedMoviesList}
-                  onCardSave={handleMovieLike}
-                  onCardDelete={handleMovieDelete}
-                />
-              </ProtectedRouteElement>           
+              <ProtectedRouteElement
+                element={SavedMovies}
+                loggedIn={loggedIn}
+                savedMoviesList={savedMoviesList}
+                onCardSave={handleMovieLike}
+                onCardDelete={handleMovieDelete}
+              />           
             }
           />
           <Route
             path="/profile"
             element={
-              <ProtectedRouteElement loggedIn={loggedIn}>
-                <Profile
+              <ProtectedRouteElement
+                  element={Profile}
+                  loggedIn={loggedIn}
                   onSignOut={handleLogout}
                   onUpdateUser={updateUserProfile}
-                  isLoader={isLoader}
-                />
-            </ProtectedRouteElement>     
+                  errorMessage={errorMessage}
+                  successMessage={successMessage}
+              />     
             }
           />
           <Route
             path="/signup"
             element={
-              <Register onRegister={handleRegister} isLoader={isLoader} />
+              <Register onRegister={handleRegister} errorMessage={errorMessage} />
             }
           />
           <Route
             path="/signin"
-            element={<Login onLogin={handleLogin} isLoader={isLoader} />}
+            element={<Login onLogin={handleLogin} errorMessage={errorMessage} />}
           />
           <Route
               path="*"
@@ -238,10 +232,8 @@ function App() {
         </Routes>
 
         <InfoTooltip
-          name={"success"}
-          isSuccess={isSuccess}
+          name={"success"}        
           isOpen={isInfoTooltipOpen}
-          onClose={closeAllPopups}
           textIsSuccessTrue={"Успешно"}
           textIsSuccessFalse={"Во время запроса произошла ошибка"}
         />
