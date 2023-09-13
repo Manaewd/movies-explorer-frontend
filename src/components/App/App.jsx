@@ -11,7 +11,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
-import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
+import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
@@ -47,39 +47,36 @@ function App() {
           navigate("/movies");
         })
         .catch((err) => console.log(err))
-        .finally(() =>
-          setIsLoader(false));
+        .finally(() => setIsLoader(false));
     }
-  }, [loggedIn])
+  }, [loggedIn]);
 
   async function handleLogin({ email, password }) {
     setIsLoader(true);
     try {
-      await mainApi.login({ email, password })
-        setLoggedIn(true);
-        navigate("/movies", { replace: true });
-    }  catch (err) {
+      await mainApi.login({ email, password });
+      setLoggedIn(true);
+      navigate("/movies", { replace: true });
+    } catch (err) {
       console.log(err);
-      } finally {
-        setIsLoader(false);
+    } finally {
+      setIsLoader(false);
+    }
   }
-}
 
   async function handleRegister({ name, email, password }) {
     try {
-      await
-      mainApi
-      .register({ name, email, password });
-      handleLogin({ email, password })
+      await mainApi.register({ name, email, password });
+      handleLogin({ email, password });
       setIsSuccess(true);
-      } catch (err) {
-        console.error(err);
-        setLoggedIn(false);
-        setIsSuccess(false);
-      } finally {
-        setIsInfoTooltipOpen(true);
-      }
+    } catch (err) {
+      console.error(err);
+      setLoggedIn(false);
+      setIsSuccess(false);
+    } finally {
+      setIsInfoTooltipOpen(true);
     }
+  }
 
   function tokenCheck() {
     mainApi
@@ -149,8 +146,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() =>
-      setIsLoader(false));
+      .finally(() => setIsLoader(false));
   }
 
   function handleMenuOpen() {
@@ -184,7 +180,7 @@ function App() {
                   onCardDelete={handleMovieDelete}
                   isLoader={isLoader}
                 />
-            </ProtectedRouteElement>    
+              </ProtectedRouteElement>
             }
           />
           <Route
@@ -197,7 +193,7 @@ function App() {
                   onCardSave={handleMovieLike}
                   onCardDelete={handleMovieDelete}
                 />
-              </ProtectedRouteElement>           
+              </ProtectedRouteElement>
             }
           />
           <Route
@@ -209,7 +205,7 @@ function App() {
                   onUpdateUser={updateUserProfile}
                   isLoader={isLoader}
                 />
-            </ProtectedRouteElement>     
+              </ProtectedRouteElement>
             }
           />
           <Route
@@ -222,11 +218,7 @@ function App() {
             path="/signin"
             element={<Login onLogin={handleLogin} isLoader={isLoader} />}
           />
-          <Route
-              path='/404'
-              element={<PageNotFound />}
-            />
-          <Route path="*" element={<Navigate to='/404' replace />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
 
         <InfoTooltip

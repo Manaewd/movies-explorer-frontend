@@ -2,7 +2,6 @@ import React from "react";
 import "./FilterCheckbox.css";
 
 export default function FilterCheckbox({ onChange, checked }) {
-
   const handleCheckboxChange = () => {
     onChange(!checked);
   };

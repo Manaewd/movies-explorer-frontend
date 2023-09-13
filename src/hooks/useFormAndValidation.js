@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { EMAIL } from '../utils/constants'
+import { EMAIL } from "../utils/constants";
 
 function emailValidation(email) {
   const patternEmail = EMAIL;
@@ -20,7 +20,10 @@ export default function Validation() {
 
     if (name === "email") {
       isValidEmail = emailValidation(value);
-      setErrors({ ...errors, [name]: isValidEmail ? "" : "Некорректный email " });
+      setErrors({
+        ...errors,
+        [name]: isValidEmail ? "" : "Некорректный email ",
+      });
     } else {
       setErrors({ ...errors, [name]: target.validationMessage });
     }

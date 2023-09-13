@@ -2,30 +2,39 @@ import { useState, useEffect } from "react";
 import "./SearchForm.css";
 import FilterCheckbox from "../../FilterCheckbox/FilterCheckbox";
 
-export default function SearchForm({ onSearch, isSaved, isShortMoviesChecked, isSaveShortMovChecked, onShortMoviesChange, onShortMovieSavChange }) {
-  const [query, setQuery] = useState('');
+export default function SearchForm({
+  onSearch,
+  isSaved,
+  isShortMoviesChecked,
+  isSaveShortMovChecked,
+  onShortMoviesChange,
+  onShortMovieSavChange,
+}) {
+  const [query, setQuery] = useState("");
   const [shortMovies, setShortMovies] = useState(isShortMoviesChecked);
 
   useEffect(() => {
     if (isSaved) {
-      const saveQuerySavMovies = localStorage.getItem('searchSavedQuery');
+      const saveQuerySavMovies = localStorage.getItem("searchSavedQuery");
       if (saveQuerySavMovies) {
         setQuery(saveQuerySavMovies);
       }
 
-      const saveShortSaveMovie = localStorage.getItem('isSavedShortMoviesChecked');
+      const saveShortSaveMovie = localStorage.getItem(
+        "isSavedShortMoviesChecked"
+      );
       if (saveShortSaveMovie) {
-        setShortMovies(saveShortSaveMovie === 'true');
+        setShortMovies(saveShortSaveMovie === "true");
       }
     } else {
-      const saveQuery = localStorage.getItem('searchQuery');
+      const saveQuery = localStorage.getItem("searchQuery");
       if (saveQuery) {
         setQuery(saveQuery);
       }
 
-      const savedShortMovie = localStorage.getItem('isShortMoviesChecked');
+      const savedShortMovie = localStorage.getItem("isShortMoviesChecked");
       if (savedShortMovie) {
-        setShortMovies(savedShortMovie === 'true');
+        setShortMovies(savedShortMovie === "true");
       }
     }
   }, []);
@@ -43,23 +52,22 @@ export default function SearchForm({ onSearch, isSaved, isShortMoviesChecked, is
     setQuery(newQuery);
 
     if (isSaved) {
-      localStorage.setItem('searchSavedQuery', newQuery);
+      localStorage.setItem("searchSavedQuery", newQuery);
     } else {
-      localStorage.setItem('searchQuery', newQuery);
+      localStorage.setItem("searchQuery", newQuery);
     }
   }
-
 
   function checkboxChange() {
     const newShortMovie = !shortMovies;
     setShortMovies(newShortMovie);
     if (isSaved) {
-      localStorage.setItem('isSavedShortMoviesChecked', newShortMovie);
+      localStorage.setItem("isSavedShortMoviesChecked", newShortMovie);
       if (onShortMovieSavChange) {
         onShortMovieSavChange(query, newShortMovie);
       }
     } else {
-      localStorage.setItem('isShortMoviesChecked', newShortMovie);
+      localStorage.setItem("isShortMoviesChecked", newShortMovie);
       if (onShortMoviesChange) {
         onShortMoviesChange(query, newShortMovie);
       }
