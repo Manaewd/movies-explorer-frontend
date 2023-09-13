@@ -4,17 +4,19 @@ import NavTab from '../NavTab/NavTab';
 import Logo from '../../components/images/logo.svg'
 import './Header.css'
 
-export default function Header({ isLoggedIn, isOpen, onClose, onMenuOpen }) {
+export default function Header({ loggedIn, isOpen, onClose, onMenuOpen }) {
 
   return (
     <Routes>
-      <Route path='/' element={isLoggedIn ? (
+      <Route path='/' element={loggedIn ? (
         <header className="header">
+          <div className='header__signin'>
             <NavTab
               isOpen={isOpen}
               onClose={onClose}
               onMenuOpen={onMenuOpen}
             />
+          </div>
         </header>
       ) : (
         <header className="header">

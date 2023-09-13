@@ -1,31 +1,74 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./SearchForm.css";
 import FilterCheckbox from "../../FilterCheckbox/FilterCheckbox";
 
-export default function SearchForm({ movies, savedMoviesList, onSearch }) {
-  const [querry, setQuerry] = useState("");
-  const { pathname } = useLocation();
-  const [shortMovies, setShortMovies] = useState(false);
+export default function SearchForm({ onSearch, isSaved, isShortMoviesChecked, isSaveShortMovChecked, onShortMoviesChange, onShortMovieSavChange }) {
+  const [query, setQuery] = useState('');
+  const [shortMovies, setShortMovies] = useState(isShortMoviesChecked);
 
-  function handleInputChange(e) {
-    setQuerry(e.target.value);
+  useEffect(() => {
+    if (isSaved) {
+      const saveQuerySavMovies = localStorage.getItem('searchSavedQuery');
+      if (saveQuerySavMovies) {
+        setQuery(saveQuerySavMovies);
+      }
+
+      const saveShortSaveMovie = localStorage.getItem('isSavedShortMoviesChecked');
+      if (saveShortSaveMovie) {
+        setShortMovies(saveShortSaveMovie === 'true');
+      }
+    } else {
+      const saveQuery = localStorage.getItem('searchQuery');
+      if (saveQuery) {
+        setQuery(saveQuery);
+      }
+
+      const savedShortMovie = localStorage.getItem('isShortMoviesChecked');
+      if (savedShortMovie) {
+        setShortMovies(savedShortMovie === 'true');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    setShortMovies(isShortMoviesChecked);
+  }, [isShortMoviesChecked]);
+
+  useEffect(() => {
+    setShortMovies(isSaveShortMovChecked);
+  }, [isSaveShortMovChecked]);
+
+  function handleChangeSearch(e) {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+
+    if (isSaved) {
+      localStorage.setItem('searchSavedQuery', newQuery);
+    } else {
+      localStorage.setItem('searchQuery', newQuery);
+    }
   }
 
-  function handleChangeCheckboxState(e) {
+
+  function checkboxChange() {
+    const newShortMovie = !shortMovies;
+    setShortMovies(newShortMovie);
+    if (isSaved) {
+      localStorage.setItem('isSavedShortMoviesChecked', newShortMovie);
+      if (onShortMovieSavChange) {
+        onShortMovieSavChange(query, newShortMovie);
+      }
+    } else {
+      localStorage.setItem('isShortMoviesChecked', newShortMovie);
+      if (onShortMoviesChange) {
+        onShortMoviesChange(query, newShortMovie);
+      }
+    }
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-    const moviesToCheck = pathname === "/movies" ? movies : savedMoviesList;
-    const checkMovies = moviesToCheck.filter((movie) => {
-      const lowerCaseQuery = querry.toLowerCase();
-      const RuLowerCase = movie.nameRU.toLowerCase();
-      const EnLowerCase = movie.nameEN.toLowerCase();
-      return (
-        RuLowerCase.includes(lowerCaseQuery) ||
-        EnLowerCase.includes(lowerCaseQuery) ||
-        (shortMovies && movie.duration <= 40)
-      );
-    });
-    onSearch(checkMovies);
+    onSearch(query, shortMovies);
   }
 
   return (
@@ -34,7 +77,7 @@ export default function SearchForm({ movies, savedMoviesList, onSearch }) {
         className="search__container"
         noValidate
         name="search"
-        onSubmit={handleChangeCheckboxState}
+        onSubmit={handleSubmit}
       >
         <div className="search__main">
           <input
@@ -42,9 +85,9 @@ export default function SearchForm({ movies, savedMoviesList, onSearch }) {
             placeholder="Фильм"
             name="search"
             type="text"
-            onChange={handleInputChange}
+            onChange={handleChangeSearch}
             minLength="2"
-            value={querry || ""}
+            value={query || ""}
             required
           />
           <button
@@ -56,9 +99,9 @@ export default function SearchForm({ movies, savedMoviesList, onSearch }) {
           </button>
         </div>
         <FilterCheckbox
-          handleShortFilms={() => setShortMovies(!shortMovies)}
           checkboxName="Короткометражки"
-          shortMovies={shortMovies}
+          onChange={checkboxChange}
+          checked={shortMovies}
         />
       </form>
     </section>

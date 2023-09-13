@@ -15,7 +15,7 @@ class MainApi {
     return Promise.reject(`Что-то пошло не так... Ошибка: ${res.status}`);
   }
 
-  register( name, email, password ) {
+  register({ name, email, password }) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       credentials: "include",
@@ -24,7 +24,7 @@ class MainApi {
     }).then((res) => this._checkResponse(res));
   }
 
-  login( email, password ) {
+  login({ email, password }) {
     return fetch(`${this._baseUrl}/signin`, {
       method: "POST",
       credentials: "include",
@@ -80,23 +80,23 @@ class MainApi {
   }
 
   // Метод передачи на сервер новых данных о пользователе
-  addNewMovie(data) {
+  addNewMovie(movie) {
     return fetch(`${this._baseUrl}/movies`, {
       method: "POST",
       credentials: "include",
       headers: this._headers,
       body: JSON.stringify({
-        country: data.country || NO_MOVIE_DATA,
-        director: data.director || NO_MOVIE_DATA,
-        duration: data.duration || NO_MOVIE_DATA,
-        year: data.year || NO_MOVIE_DATA,
-        description: data.description || NO_MOVIE_DATA,
-        image: `${BASE_URL}${data.image.url}`,
-        trailerLink: data.trailerLink,
-        nameRU: data.nameRU || NO_MOVIE_DATA,
-        nameEN: data.nameEN || NO_MOVIE_DATA,
-        thumbnail: `${BASE_URL}${data.image.formats.thumbnail.url}`,
-        movieId: data.id,
+        country: movie.country || NO_MOVIE_DATA,
+        director: movie.director || NO_MOVIE_DATA,
+        duration: movie.duration || NO_MOVIE_DATA,
+        year: movie.year || NO_MOVIE_DATA,
+        description: movie.description || NO_MOVIE_DATA,
+        image: `${BASE_URL}${movie.image.url}`,
+        trailerLink: movie.trailerLink,
+        nameRU: movie.nameRU || NO_MOVIE_DATA,
+        nameEN: movie.nameEN || NO_MOVIE_DATA,
+        thumbnail: `${BASE_URL}${movie.image.formats.thumbnail.url}`,
+        movieId: movie.id,
       }),
     }).then((res) => this._checkResponse(res));
   }

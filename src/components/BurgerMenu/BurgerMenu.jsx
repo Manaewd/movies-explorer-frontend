@@ -1,12 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import "./BurgerMenu.css";
 import closeButton from "../images/icon-close-menu.svg";
 
 export default function BurgerMenu({ isOpen, onClose }) {
   return (
-    <>
       <div className={isOpen ? "sidebar" : " sidebar sidebar_hidden"}>
         <div className="sidebar__container">
           <div className="sidebar__shadow"></div>
@@ -20,29 +19,28 @@ export default function BurgerMenu({ isOpen, onClose }) {
             </button>
             <ul className="sidebar__elements">
               <li className="sidebar__element" onClick={onClose}>
-                <Link to="/" className="sidebar__link">
+                <NavLink to="/" className="sidebar__link">
                   Главная
-                </Link>
+                </NavLink>
               </li>
               <li className="sidebar__element" onClick={onClose}>
-                <Link to="/movies" className="sidebar__link">
+                <NavLink to="/movies" className="sidebar__link">
                   Фильмы
-                </Link>
+                </NavLink>
               </li>
               <li className="sidebar__element" onClick={onClose}>
-                <Link to="/saved-movies" className="sidebar__link">
+                <NavLink to="/saved-movies" className="sidebar__link">
                   Сохраненные фильмы
-                </Link>
+                </NavLink>
               </li>
             </ul>
             <div className="sidebar__account-element" onClick={onClose}>
-              <Link to="/profile" className="sidebar__link">
+              <NavLink to="/profile" className="sidebar__link">
                 Аккаунт
-              </Link>
+              </NavLink>
             </div>
           </nav>
         </div>
       </div>
-    </>
   );
 }

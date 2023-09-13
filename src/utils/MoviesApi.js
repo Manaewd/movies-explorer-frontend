@@ -6,20 +6,6 @@ class MoviesApi {
     this._headers = headers;
   }
 
-  // _checkResponse(promise) {
-  //     return promise.then((res) => {
-  //         if (res.ok) {
-  //             return res.json();
-  //         }
-  //         else {
-  //             return Promise.reject(`Ошибка: ${res.status}: ${res.statusText}`);
-  //         }
-  //     })
-  //         .then((result) => {
-  //             return result;
-  //         })
-  // }
-
   _checkResponse(res) {
     if (res.ok) {
       return res.json();
