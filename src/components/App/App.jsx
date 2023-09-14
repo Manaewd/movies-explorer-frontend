@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import Header from "../Header/Header";
@@ -29,6 +29,7 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     tokenCheck();
@@ -44,7 +45,7 @@ function App() {
           setCurrentUser(userData);
           setMovies(moviesData);
           setSavedMoviesList(moviesSavedData);
-          navigate("/movies");
+          navigate(location, { replace: true });
         })
         .catch((err) => console.log(err))
         .finally(() => setIsLoader(false));
@@ -57,10 +58,13 @@ function App() {
       await mainApi.login({ email, password });
       setLoggedIn(true);
       navigate("/movies", { replace: true });
+      setIsSuccess(true);
     } catch (err) {
       console.log(err);
+      setIsSuccess(false);
     } finally {
       setIsLoader(false);
+      setIsInfoTooltipOpen(true);
     }
   }
 
@@ -83,7 +87,7 @@ function App() {
       .checkToken()
       .then(() => {
         setLoggedIn(true);
-        navigate("/");
+        navigate(location, { replace: true });
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -121,7 +125,6 @@ function App() {
   }
 
   function handleMovieDelete(movie) {
-    setIsLoader(true);
     mainApi
       .deleteCard(movie._id)
       .then(() => {
@@ -132,11 +135,9 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setIsLoader(false));
   }
 
   function handleMovieLike(movie) {
-    setIsLoader(true);
     mainApi
       .addNewMovie(movie)
       .then((data) => {
@@ -146,7 +147,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setIsLoader(false));
   }
 
   function handleMenuOpen() {
@@ -192,6 +192,7 @@ function App() {
                   savedMoviesList={savedMoviesList}
                   onCardSave={handleMovieLike}
                   onCardDelete={handleMovieDelete}
+                  isLoader={isLoader}
                 />
               </ProtectedRouteElement>
             }
@@ -227,7 +228,7 @@ function App() {
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
           textIsSuccessTrue={"Успешно"}
-          textIsSuccessFalse={"Во время запроса произошла ошибка"}
+          textIsSuccessFalse={"Что-то пошло не так! Попробуйте ещё раз."}
         />
       </div>
     </CurrentUserContext.Provider>

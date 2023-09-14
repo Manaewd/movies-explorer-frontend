@@ -8,6 +8,7 @@
 	width: 100%;
 	max-width: 300px;
 	height: 50px;
+	margin: 0 auto;
 }
 
 .info_opened {
@@ -18,7 +19,6 @@
 	position: absolute;
 	bottom: 0;
 	padding: 5px;
-	left: 0;
 	width: 100%;
 	height: 100%;
 	background-color: #fff;
@@ -43,7 +43,7 @@
 
 .info__text {
 	color: black;
-	font-size: 12px;
+	font-size: 10px;
 	text-align: center;
 	overflow: hidden;
 	text-overflow: ellipsis;

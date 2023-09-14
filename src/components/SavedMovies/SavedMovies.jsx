@@ -100,4 +100,5 @@ function SavedMovies({ movies, savedMoviesList, onCardSave, onCardDelete }) {
   );
 }
 
+
 export default SavedMovies;

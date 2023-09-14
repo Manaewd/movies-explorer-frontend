@@ -76,9 +76,11 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
+  transition: opacity .2s linear;
 }
 .navtab__link:hover {
   opacity: 0.7;
+  cursor: pointer;
 }
 .navtab__link:last-of-type {
   padding: 0 20px 0 16px;
