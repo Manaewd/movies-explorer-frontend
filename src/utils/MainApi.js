@@ -114,6 +114,7 @@ class MainApi {
 
 const mainApi = new MainApi({
   baseUrl: "https://api.manaewdiploma.nomoredomains.xyz",
+  // baseUrl: "http://localhost:3000",
   credentials: "include",
   headers: {
     "Content-Type": "application/json",
