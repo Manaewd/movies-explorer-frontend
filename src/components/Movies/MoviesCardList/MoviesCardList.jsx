@@ -96,7 +96,7 @@ function MoviesCardList({
                         )))}
                 </ul>
             ) : (
-                isNotFound && !isLoading && <p className='movies-card-list__notfound'>По вашему запросу ничего не найдено</p>
+                isNotFound && !isLoading && <p className='movies-card-list__notfound'>Ничего не найдено</p>
             )}
             {movies.length > shownMovies && !isSavedMovies && (
                 <button type='button' className='movies-card-list__button' onClick={loadMovies}>Ещё</button>
