@@ -1,108 +1,108 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import './MoviesCardList.css';
 
-import MoviesCard from "../MoviesCard/MoviesCard";
-import "./MoviesCardList.css";
+import Preloader from '../Preloader/Preloader';
+import MoviesCard from '../MoviesCard/MoviesCard';
 import {
-  SCREEN_LARGE,
-  SCREEN_MIDDLE,
-  DESKTOP_MOVIES,
-  TAB_MOVIES,
-  MOBILE_MOVIES,
-  DESKTOP_ADDITIONAL_MOVIES,
-  TAB_ADDITIONAL_MOVIES,
-  MOBILE_ADDITIONAL_MOVIES,
-} from "../../../utils/constants";
+    DESKTOP_ADDITIONAL_MOVIES,
+    MOBILE_ADDITIONAL_MOVIES,
+    TAB_ADDITIONAL_MOVIES,
+    DESKTOP_MOVIES,
+    TAB_MOVIES,
+    MOBILE_MOVIES,
+    SCREEN_LARGE,
+    SCREEN_MIDDLE
+} from '../../../utils/constants';
 
-export default function MoviesCardList({
-  movies,
-  savedMoviesList,
-  onCardSave,
-  onCardDelete,
-  isSaved,
+function MoviesCardList({
+    isSavedMovies,
+    moviesData,
+    isLoading,
+    isNotFound,
+    onMovieSave,
+    userMovies,
+    onMovieDelete
 }) {
-  const { pathname } = useLocation();
-  const [cardsToShow, setCardsToShow] = useState(0);
+    const [movies, setMovies] = useState(moviesData);
+    const [shownMovies, setShownMovies] = useState(0);
+    const [width, setWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      let newCardsToShow;
+    function showMovies() {
+            if (width > SCREEN_LARGE) {
+                setShownMovies(DESKTOP_MOVIES);
+            } else if (width > SCREEN_MIDDLE) {
+                setShownMovies(TAB_MOVIES);
+            } else if (width <= SCREEN_MIDDLE) {
+                setShownMovies(MOBILE_MOVIES);
+            }
+     }
 
-      if (window.innerWidth >= SCREEN_LARGE) {
-        newCardsToShow = DESKTOP_MOVIES;
-      } else if (window.innerWidth >= SCREEN_MIDDLE) {
-        newCardsToShow = TAB_MOVIES;
-      } else {
-        newCardsToShow = MOBILE_MOVIES;
-      }
+    useEffect(() => {
+        const handleResizeWindow = () => {
+            setWidth(window.innerWidth);
+            showMovies();
+        }
+        window.addEventListener("resize", handleResizeWindow);
+        return () => {
+            window.removeEventListener("resize", handleResizeWindow);
+        };
+    }, []);
 
-      setCardsToShow(newCardsToShow);
-    };
+    useEffect(() => {
+        setMovies(moviesData);
+        setShownMovies(0);
+        showMovies();
+    }, [moviesData]);
 
-    const throttledResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(handleResize, 250);
-    };
-
-    let resizeTimer;
-    window.addEventListener("resize", throttledResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", throttledResize);
-    };
-  }, []);
-
-  const loadMovies = () => {
-    if (window.innerWidth >= SCREEN_LARGE) {
-      setCardsToShow((prevCards) => prevCards + DESKTOP_ADDITIONAL_MOVIES);
-    } else if (window.innerWidth >= SCREEN_MIDDLE) {
-      setCardsToShow((prevCards) => prevCards + TAB_ADDITIONAL_MOVIES);
-    } else {
-      setCardsToShow((prevCards) => prevCards + MOBILE_ADDITIONAL_MOVIES);
+    function loadMovies() {
+        if (width > SCREEN_LARGE) {
+            setShownMovies(shownMovies + DESKTOP_ADDITIONAL_MOVIES);
+        } else if (width > SCREEN_MIDDLE) {
+            setShownMovies(shownMovies + TAB_ADDITIONAL_MOVIES);
+        } else if (width <= SCREEN_MIDDLE) {
+            setShownMovies(shownMovies + MOBILE_ADDITIONAL_MOVIES);
+        }
     }
-  };
 
-  function getSavedMovies(savedMovies, movie) {
-    return savedMovies.find((savedMovie) => savedMovie.movieId === movie.id);
-  }
+    function getSavedMovies(userMovies, movie) {
+        return userMovies.find((userMovie) => userMovie.movieId === movie.id);
+    }
 
-  return (
-    <section className="movies-card-list">
-      {pathname === "/movies" ? (
-        <ul className="movies-card-list__container">
-          {movies.slice(0, cardsToShow).map((movie) => (
-            <MoviesCard
-              key={isSaved ? movie._id : movie.id}
-              movie={movie}
-              saved={getSavedMovies(savedMoviesList, movie)}
-              savedMoviesList={savedMoviesList}
-              isSaved={isSaved}
-              onCardSave={onCardSave}
-              onCardDelete={onCardDelete}
-            />
-          ))}
-        </ul>
-      ) : (
-        <ul className="movies-card-list__container">
-          {savedMoviesList.slice(0, cardsToShow).map((movie) => (
-            <MoviesCard
-              key={isSaved ? movie._id : movie.id}
-              movie={movie}
-              onCardDelete={onCardDelete}
-              saved={getSavedMovies(savedMoviesList, movie)}
-              isSaved={isSaved}
-              savedMoviesList={savedMoviesList}
-              onCardSave={onCardSave}
-            />
-          ))}
-        </ul>
-      )}
-      {pathname === "/movies" && cardsToShow < movies.length ? (
-        <button className="movies__button" onClick={loadMovies}>
-          Ещё
-        </button>
-      ) : null}
-    </section>
-  );
-}
+    return (
+        <section className='movies-card-list'>
+            {movies.length > 0 ? (
+                <ul className='movies-card-list__container'>
+                    {isSavedMovies ? (
+                        movies.map((movie) => (
+                            <MoviesCard
+                                key={isSavedMovies ? movie._id : movie.id}
+                                userMovies={userMovies}
+                                movie={movie}
+                                isSavedMovies={isSavedMovies}
+                                onMovieSave={onMovieSave}
+                                onMovieDelete={onMovieDelete}
+                                saved={getSavedMovies(userMovies, movie)}
+                            />
+                        ))) : (movies.slice(0, shownMovies).map((movie) => (
+                            <MoviesCard
+                                key={isSavedMovies ? movie._id : movie.id}
+                                userMovies={userMovies}
+                                movie={movie}
+                                isSavedMovies={isSavedMovies}
+                                onMovieSave={onMovieSave}
+                                onMovieDelete={onMovieDelete}
+                                saved={getSavedMovies(userMovies, movie)}
+                            />
+                        )))}
+                </ul>
+            ) : (
+                isNotFound && !isLoading && <p className='movies-card-list__notfound'>По вашему запросу ничего не найдено</p>
+            )}
+            {movies.length > shownMovies && !isSavedMovies && (
+                <button type='button' className='movies-card-list__button' onClick={loadMovies}>Ещё</button>
+            )}
+        </section>
+    );
+};
+
+export default MoviesCardList;

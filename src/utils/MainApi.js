@@ -11,7 +11,6 @@ class MainApi {
       return res.json();
     }
     console.log(res);
-    // return res.json().then(res => { throw res });
     return Promise.reject(`Что-то пошло не так... Ошибка: ${res.status}`);
   }
 
@@ -80,23 +79,25 @@ class MainApi {
   }
 
   // Метод передачи на сервер новых данных о пользователе
-  addNewMovie(movie) {
+  addNewMovie(data) {
     return fetch(`${this._baseUrl}/movies`, {
       method: "POST",
       credentials: "include",
       headers: this._headers,
       body: JSON.stringify({
-        country: movie.country || NO_MOVIE_DATA,
-        director: movie.director || NO_MOVIE_DATA,
-        duration: movie.duration || NO_MOVIE_DATA,
-        year: movie.year || NO_MOVIE_DATA,
-        description: movie.description || NO_MOVIE_DATA,
-        image: `${BASE_URL}${movie.image.url}`,
-        trailerLink: movie.trailerLink,
-        nameRU: movie.nameRU || NO_MOVIE_DATA,
-        nameEN: movie.nameEN || NO_MOVIE_DATA,
-        thumbnail: `${BASE_URL}${movie.image.formats.thumbnail.url}`,
-        movieId: movie.id,
+        country: data.country || NO_MOVIE_DATA,
+        director: data.director || NO_MOVIE_DATA,
+        duration: data.duration || NO_MOVIE_DATA,
+        year: data.year || NO_MOVIE_DATA,
+        description: data.description || NO_MOVIE_DATA,
+        image: `${BASE_URL}${data.image.url}`,
+        trailerLink: data.trailerLink,
+        thumbnail: `${BASE_URL}${data.image.formats.thumbnail.url}`,
+        movieId: data.id,
+        nameRU: data.nameRU || NO_MOVIE_DATA,
+        nameEN: data.nameEN || NO_MOVIE_DATA,
+        
+        
       }),
     }).then((res) => this._checkResponse(res));
   }
@@ -112,8 +113,8 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-  //baseUrl: "https://api.manaewdiploma.nomoredomains.xyz",
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://api.manaewdiploma.nomoredomains.xyz",
+  // baseUrl: "http://localhost:3000",
   credentials: "include",
   headers: {
     "Content-Type": "application/json",

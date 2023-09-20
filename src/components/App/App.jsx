@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import Header from "../Header/Header";
@@ -16,17 +16,15 @@ import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 import mainApi from "../../utils/MainApi";
-import moviesApi from "../../utils/MoviesApi";
 
 function App() {
-  const [isLoader, setIsLoader] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [movies, setMovies] = useState([]);
+  const [userMovies, setUserMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [savedMoviesList, setSavedMoviesList] = useState([]);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,26 +32,28 @@ function App() {
   useEffect(() => {
     tokenCheck();
     if (loggedIn) {
-      setIsLoader(true);
+      setIsLoading(true);
       Promise.all([
         mainApi.getUserInfo(),
-        moviesApi.getMovies(),
         mainApi.getSavedMovies(),
       ])
         .then((result) => {
-          const [userData, moviesData, moviesSavedData] = result;
+          const [userData, userMovies] = result;
           setCurrentUser(userData);
-          setMovies(moviesData);
-          setSavedMoviesList(moviesSavedData);
+          setUserMovies(userMovies);
           navigate(location, { replace: true });
         })
-        .catch((err) => console.log(err))
-        .finally(() => setIsLoader(false));
+        .catch((err) => {
+          console.log(err);
+          setIsSuccess(false);
+          setIsInfoToolTipOpen(true);
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [loggedIn]);
 
   async function handleLogin({ email, password }) {
-    setIsLoader(true);
+    setIsLoading(true);
     try {
       await mainApi.login({ email, password });
       setLoggedIn(true);
@@ -63,8 +63,8 @@ function App() {
       console.log(err);
       setIsSuccess(false);
     } finally {
-      setIsLoader(false);
-      setIsInfoTooltipOpen(true);
+      setIsLoading(false);
+      setIsInfoToolTipOpen(true);
     }
   }
 
@@ -73,12 +73,12 @@ function App() {
       await mainApi.register({ name, email, password });
       handleLogin({ email, password });
       setIsSuccess(true);
+      setIsInfoToolTipOpen(true);
     } catch (err) {
       console.error(err);
-      setLoggedIn(false);
-      setIsSuccess(false);
+      setIsLoading(false);  
     } finally {
-      setIsInfoTooltipOpen(true);
+      setIsInfoToolTipOpen(true);
     }
   }
 
@@ -108,27 +108,27 @@ function App() {
   }
 
   function updateUserProfile({ name, email }) {
-    setIsLoader(true);
+    setIsLoading(true);
     mainApi
       .updateUser({ name, email })
       .then(({ name, email }) => {
         setCurrentUser({ name, email });
         setIsSuccess(true);
-        setIsInfoTooltipOpen(true);
+        setIsInfoToolTipOpen(true);
       })
       .catch((err) => {
         console.log(err);
         setIsSuccess(false);
-        setIsInfoTooltipOpen(true);
+        setIsInfoToolTipOpen(true);
       })
-      .finally(() => setIsLoader(false));
+      .finally(() => setIsLoading(false));
   }
 
   function handleMovieDelete(movie) {
     mainApi
       .deleteCard(movie._id)
       .then(() => {
-        setSavedMoviesList((state) =>
+        setUserMovies((state) =>
           state.filter((item) => item._id !== movie._id)
         );
       })
@@ -142,7 +142,7 @@ function App() {
       .addNewMovie(movie)
       .then((data) => {
         const newMovie = data;
-        setSavedMoviesList([newMovie, ...savedMoviesList]);
+        setUserMovies([newMovie, ...userMovies]);
       })
       .catch((err) => {
         console.log(err);
@@ -155,7 +155,7 @@ function App() {
 
   function closeAllPopups() {
     setIsMobileMenuOpen(false);
-    setIsInfoTooltipOpen(false);
+    setIsInfoToolTipOpen(false);
   }
 
   return (
@@ -174,11 +174,12 @@ function App() {
             element={
               <ProtectedRouteElement loggedIn={loggedIn}>
                 <Movies
-                  movies={movies}
-                  savedMoviesList={savedMoviesList}
-                  onCardSave={handleMovieLike}
-                  onCardDelete={handleMovieDelete}
-                  isLoader={isLoader}
+                  userMovies={userMovies}
+                  isSavedMovies={false}
+                  onError={setIsInfoToolTipOpen}
+                  onMovieSave={handleMovieLike}
+                  onMovieDelete={handleMovieDelete}
+                  isLoader={isLoading}
                 />
               </ProtectedRouteElement>
             }
@@ -188,11 +189,12 @@ function App() {
             element={
               <ProtectedRouteElement loggedIn={loggedIn}>
                 <SavedMovies
-                  movies={movies}
-                  savedMoviesList={savedMoviesList}
-                  onCardSave={handleMovieLike}
-                  onCardDelete={handleMovieDelete}
-                  isLoader={isLoader}
+                  userMovies={userMovies}
+                  isSavedMovies={true}
+                  onError={setIsInfoToolTipOpen}
+                  onMovieSave={handleMovieLike}
+                  onMovieDelete={handleMovieDelete}
+                  
                 />
               </ProtectedRouteElement>
             }
@@ -204,7 +206,7 @@ function App() {
                 <Profile
                   onSignOut={handleLogout}
                   onUpdateUser={updateUserProfile}
-                  isLoader={isLoader}
+                  isLoader={isLoading}
                 />
               </ProtectedRouteElement>
             }
@@ -212,23 +214,22 @@ function App() {
           <Route
             path="/signup"
             element={
-              <Register onRegister={handleRegister} isLoader={isLoader} />
+              <Register onRegister={handleRegister} isLoader={isLoading} />
             }
           />
           <Route
             path="/signin"
-            element={<Login onLogin={handleLogin} isLoader={isLoader} />}
+            element={<Login onLogin={handleLogin} isLoader={isLoading} />}
           />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
 
         <InfoTooltip
-          name={"success"}
-          isSuccess={isSuccess}
-          isOpen={isInfoTooltipOpen}
-          onClose={closeAllPopups}
           textIsSuccessTrue={"Успешно"}
           textIsSuccessFalse={"Что-то пошло не так! Попробуйте ещё раз."}
+          isSuccess={isSuccess}
+          isOpen={isInfoToolTipOpen}
+          onClose={closeAllPopups}
         />
       </div>
     </CurrentUserContext.Provider>
