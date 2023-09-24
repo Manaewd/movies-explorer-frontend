@@ -1,42 +1,36 @@
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../../../utils/constants";
-import "./MoviesCard.css";
+import React from 'react';
+import './MoviesCard.css';
 
-export default function MoviesCard({
+function MoviesCard({
+  userMovies,
   movie,
-  isSaved,
-  onCardSave,
-  onCardDelete,
   saved,
-  savedMoviesList,
+  isSavedMovies,
+  onMovieSave,
+  onMovieDelete
 }) {
-  const editedDuration = (minutes) => {
-    if (isNaN(minutes) || minutes < 0) {
-      return "Некорректное значение";
-    }
+  const image = isSavedMovies ? `${movie.image}` : `https://api.nomoreparties.co${movie.image.url}`;
 
-    const hoursDuration = Math.floor(minutes / 60);
-    const minuteDuration = minutes % 60;
-
-    return `${hoursDuration}ч ${minuteDuration}м`;
-  };
-
+  function editedDuration(duration) {
+    const hours = Math.floor(duration / 60);
+    const minutes = duration % 60;
+    return `${hours}ч ${minutes}м`;
+  }
+  
   function handleCardClick() {
     if (saved) {
-      const movieDelete = savedMoviesList.find((m) => m.movieId === movie.id);
-      if (movieDelete) {
-        onCardDelete(movieDelete);
-      }
+      onMovieDelete(userMovies.filter((m) => m.movieId === movie.id)[0]);
     } else {
-      onCardSave(movie);
+      onMovieSave(movie);
     }
   }
 
   function onDelete() {
-    onCardDelete(movie);
+      onMovieDelete(movie);
   }
 
-  const cardSaveButtonClassName = `${
+    const cardSaveButtonClassName = `${
     saved
       ? "movie-card__save-button movie-card__save-button_saved"
       : "movie-card__save-button"
@@ -50,7 +44,7 @@ export default function MoviesCard({
         target="_blank"
       >
         <img
-          src={isSaved ? movie.image : `${BASE_URL}${movie.image.url}`}
+          src={image}
           alt={`фотокарточка фильма ${movie.nameRU}`}
           className="movie-card__img"
         />
@@ -58,8 +52,7 @@ export default function MoviesCard({
       <div className="movie-card__container">
         <div className="movie-card__info">
           <h2 className="movie-card__title">{movie.nameRU}</h2>
-
-          {isSaved ? (
+          {isSavedMovies ? (
             <button
               type="button"
               className="movie-card__remove-button"
@@ -71,7 +64,6 @@ export default function MoviesCard({
               className={cardSaveButtonClassName}
               onClick={handleCardClick}
             >
-              {saved ? null : ""}
             </button>
           )}
         </div>
@@ -79,4 +71,6 @@ export default function MoviesCard({
       </div>
     </li>
   );
-}
+};
+
+export default MoviesCard;

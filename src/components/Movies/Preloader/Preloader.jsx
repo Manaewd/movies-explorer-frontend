@@ -1,9 +1,9 @@
 import React from "react";
 import "./Preloader.css";
 
-function Preloader({ isLoader }) {
+function Preloader({ isLoading }) {
   return (
-    isLoader && (
+    isLoading && (
       <section className="preloader">
         <div className="preloader__container">
           <span className="preloader__round"></span>

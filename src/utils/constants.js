@@ -7,7 +7,6 @@ export const ERROR_REQUEST_TEXT = 'Во время запроса произош
 export const ERROR_SEARCH_TEXT = 'Ничего не найдено';
 export const NO_MOVIE_DATA = 'Нет данных';
 
-export const SCREEN_SMALL = 320;
 export const SCREEN_MIDDLE = 768;
 export const SCREEN_LARGE = 1280;
 
@@ -20,6 +19,6 @@ export const TAB_ADDITIONAL_MOVIES = 2;
 export const MOBILE_ADDITIONAL_MOVIES = 2;
 
 export const NAME = /^[А-Яа-яa-zA-Z- ]+$/;
-export const EMAIL = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,4})$/i;
+export const EMAIL = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 export const PASSWORD = /^[A-Za-z0-9-!@#$%^&*]+$/;
 export const URL = /^https?:\/\/(www\.)?[a-zA-Z0-9]+\.[\w\d\-._~:?#[\]@!$&'()*+,;=]{2,}#?/;

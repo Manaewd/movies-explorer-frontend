@@ -24,7 +24,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #2BE080;
+  background-color: #EBEBEB;
   transition: 0.4s;
   border-radius: 20px;
   transition: box-shadow 0.3s ease-in;
@@ -41,16 +41,16 @@
   width: 16px;
   top: 2px;
   left: 2px;
-  background-color: #EBEBEB;
+  background-color: #2BE080;
   transition: 0.4s;
   border-radius: 50%;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
 }
 .checkbox__input:checked + .checkbox__span {
-  background-color: #EBEBEB;
+  background-color: #2BE080;
 }
 .checkbox__input:checked + .checkbox__span:before {
-  background-color: #2BE080;
+  background-color: #EBEBEB;
   border: 1px solid #FFFFFF;
   transform: translateX(16px);
 }

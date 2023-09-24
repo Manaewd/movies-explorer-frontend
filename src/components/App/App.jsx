@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import Header from "../Header/Header";
@@ -11,72 +11,75 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 import mainApi from "../../utils/MainApi";
-import moviesApi from "../../utils/MoviesApi";
 
 function App() {
-  const [isLoader, setIsLoader] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [userMovies, setUserMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
-  const [movies, setMovies] = useState([]);
-  const [savedMoviesList, setSavedMoviesList] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     tokenCheck();
     if (loggedIn) {
+      setIsLoading(true);
       Promise.all([
         mainApi.getUserInfo(),
-        moviesApi.getMovies(),
         mainApi.getSavedMovies(),
       ])
         .then((result) => {
-          const [userData, moviesData, moviesSavedData] = result;
+          const [userData, userMovies] = result;
           setCurrentUser(userData);
-          setMovies(moviesData);
-          setSavedMoviesList(moviesSavedData);
-          navigate("/movies");
+          setUserMovies(userMovies);
+          navigate(location, { replace: true });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setIsSuccess(false);
+          setIsInfoToolTipOpen(true);
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [loggedIn]);
 
-  function handleLogin({ email, password }) {
-    setIsLoader(true);
-    mainApi
-      .login({ email, password })
-      .then(() => {
-        setLoggedIn(true);
-        navigate("/movies");
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      })
-      .finally(() => setIsInfoTooltipOpen(true));
+  async function handleLogin({ email, password }) {
+    setIsLoading(true);
+    try {
+      await mainApi.login({ email, password });
+      setLoggedIn(true);
+      navigate("/movies", { replace: true });
+      setIsSuccess(true);
+    } catch (err) {
+      console.log(err);
+      setIsSuccess(false);
+    } finally {
+      setIsLoading(false);
+      setIsInfoToolTipOpen(true);
+    }
   }
 
-  function handleRegister({ name, email, password }) {
-    setIsLoader(true);
-    mainApi
-      .register({ name, email, password })
-      .then(() => {
-        setLoggedIn(true);
-        navigate("/movies", { replace: true });
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        setIsSuccess(false);
-        console.log(`Ошибка: ${err}`);
-      })
-      .finally(() => setIsInfoTooltipOpen(true));
+  async function handleRegister({ name, email, password }) {
+    try {
+      await mainApi.register({ name, email, password });
+      handleLogin({ email, password });
+      setIsSuccess(true);
+      setIsInfoToolTipOpen(true);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);  
+    } finally {
+      setIsInfoToolTipOpen(true);
+    }
   }
 
   function tokenCheck() {
@@ -84,7 +87,7 @@ function App() {
       .checkToken()
       .then(() => {
         setLoggedIn(true);
-        navigate("/");
+        navigate(location, { replace: true });
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -96,6 +99,7 @@ function App() {
       .logout()
       .then(() => {
         setLoggedIn(false);
+        localStorage.clear();
         navigate("/", { replace: true });
       })
       .catch((err) => {
@@ -104,50 +108,45 @@ function App() {
   }
 
   function updateUserProfile({ name, email }) {
-    setIsLoader(true);
+    setIsLoading(true);
     mainApi
       .updateUser({ name, email })
       .then(({ name, email }) => {
-        // const {email, name} = newUser
         setCurrentUser({ name, email });
         setIsSuccess(true);
-        setIsInfoTooltipOpen(true);
-        navigate("/profile");
+        setIsInfoToolTipOpen(true);
       })
       .catch((err) => {
         console.log(err);
         setIsSuccess(false);
-        setIsInfoTooltipOpen(true);
+        setIsInfoToolTipOpen(true);
       })
-      .finally(() => setIsLoader(false));
+      .finally(() => setIsLoading(false));
   }
 
   function handleMovieDelete(movie) {
-    setIsLoader(true);
     mainApi
       .deleteCard(movie._id)
       .then(() => {
-        setSavedMoviesList((state) =>
+        setUserMovies((state) =>
           state.filter((item) => item._id !== movie._id)
         );
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setIsLoader(false));
   }
 
   function handleMovieLike(movie) {
-    setIsLoader(true);
     mainApi
       .addNewMovie(movie)
       .then((data) => {
         const newMovie = data;
-        setSavedMoviesList([newMovie, ...savedMoviesList]);
+        setUserMovies([newMovie, ...userMovies]);
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
   }
 
   function handleMenuOpen() {
@@ -156,7 +155,7 @@ function App() {
 
   function closeAllPopups() {
     setIsMobileMenuOpen(false);
-    setIsInfoTooltipOpen(false);
+    setIsInfoToolTipOpen(false);
   }
 
   return (
@@ -173,55 +172,64 @@ function App() {
           <Route
             path="/movies"
             element={
-              <Movies
-                movies={movies}
-                savedMoviesList={savedMoviesList}
-                onCardSave={handleMovieLike}
-                onCardDelete={handleMovieDelete}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <Movies
+                  userMovies={userMovies}
+                  isSavedMovies={false}
+                  onError={setIsInfoToolTipOpen}
+                  onMovieSave={handleMovieLike}
+                  onMovieDelete={handleMovieDelete}
+                  isLoader={isLoading}
+                />
+              </ProtectedRouteElement>
             }
           />
           <Route
             path="/saved-movies"
             element={
-              <SavedMovies
-                movies={movies}
-                savedMoviesList={savedMoviesList}
-                onCardSave={handleMovieLike}
-                onCardDelete={handleMovieDelete}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <SavedMovies
+                  userMovies={userMovies}
+                  isSavedMovies={true}
+                  onError={setIsInfoToolTipOpen}
+                  onMovieSave={handleMovieLike}
+                  onMovieDelete={handleMovieDelete}
+                  
+                />
+              </ProtectedRouteElement>
             }
           />
           <Route
             path="/profile"
             element={
-              <Profile
-                onSignOut={handleLogout}
-                onUpdateUser={updateUserProfile}
-                isLoader={isLoader}
-              />
+              <ProtectedRouteElement loggedIn={loggedIn}>
+                <Profile
+                  onSignOut={handleLogout}
+                  onUpdateUser={updateUserProfile}
+                  isLoader={isLoading}
+                />
+              </ProtectedRouteElement>
             }
           />
           <Route
             path="/signup"
             element={
-              <Register onRegister={handleRegister} isLoader={isLoader} />
+              <Register onRegister={handleRegister} isLoader={isLoading} />
             }
           />
           <Route
             path="/signin"
-            element={<Login onLogin={handleLogin} isLoader={isLoader} />}
+            element={<Login onLogin={handleLogin} isLoader={isLoading} />}
           />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
 
         <InfoTooltip
-          name={"success"}
-          isSuccess={isSuccess}
-          isOpen={isInfoTooltipOpen}
-          onClose={closeAllPopups}
           textIsSuccessTrue={"Успешно"}
-          textIsSuccessFalse={"Во время запроса произошла ошибка"}
+          textIsSuccessFalse={"Что-то пошло не так! Попробуйте ещё раз."}
+          isSuccess={isSuccess}
+          isOpen={isInfoToolTipOpen}
+          onClose={closeAllPopups}
         />
       </div>
     </CurrentUserContext.Provider>

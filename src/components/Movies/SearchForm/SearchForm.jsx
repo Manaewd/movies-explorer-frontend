@@ -1,66 +1,79 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import "./SearchForm.css";
-import FilterCheckbox from "../../FilterCheckbox/FilterCheckbox";
+import { useState, useEffect, useCallback } from "react";
+import './SearchForm.css';
+import FilterCheckbox from '../../FilterCheckbox/FilterCheckbox';
 
-export default function SearchForm({ movies, savedMoviesList, onSearch }) {
-  const [querry, setQuerry] = useState("");
-  const { pathname } = useLocation();
-  const [shortMovies, setShortMovies] = useState(false);
+function SearchForm(props) {
+    const [request, setRequest] = useState('');
+    const [error, setError] = useState('');
+    const [isValid, setIsValid] = useState(false);
 
-  function handleInputChange(e) {
-    setQuerry(e.target.value);
-  }
+    const handleChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        setRequest(value);
+        setError('Нужно ввести ключевое слово');
+        setIsValid(target.closest("form").checkValidity());
+    };
 
-  function handleChangeCheckboxState(e) {
-    e.preventDefault();
-    const moviesToCheck = pathname === "/movies" ? movies : savedMoviesList;
-    const checkMovies = moviesToCheck.filter((movie) => {
-      const lowerCaseQuery = querry.toLowerCase();
-      const RuLowerCase = movie.nameRU.toLowerCase();
-      const EnLowerCase = movie.nameEN.toLowerCase();
-      return (
-        RuLowerCase.includes(lowerCaseQuery) ||
-        EnLowerCase.includes(lowerCaseQuery) ||
-        (shortMovies && movie.duration <= 40)
-      );
-    });
-    onSearch(checkMovies);
-  }
+    const resetForm = useCallback(
+        (newError = '', newIsValid = false) => {
+            setError(newError);
+            setIsValid(newIsValid);
+        },
+        [setError, setIsValid]
+    );
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        isValid ? props.onSearch(request) : setError('Нужно ввести ключевое слово');
+    }
 
-  return (
+    useEffect(() => {
+        if (!props.isSavedMovies && localStorage.getItem('movieSearch')) {
+            const localRequest = localStorage.getItem('movieSearch');
+            setRequest(localRequest);
+            resetForm();
+        }
+    }, [props.isSavedMovies]);
+
+return (
     <section className="search">
       <form
         className="search__container"
-        noValidate
-        name="search"
-        onSubmit={handleChangeCheckboxState}
+        onSubmit={handleSubmit}
       >
+        {!isValid && <span className='search-form__notfound'>{error}</span>}
         <div className="search__main">
           <input
             className="search__input"
             placeholder="Фильм"
-            name="search"
             type="text"
-            onChange={handleInputChange}
-            minLength="2"
-            value={querry || ""}
+            onChange={handleChange}
+            value={request || ""}
+            name="request"
+            id="request"
             required
+            formNoValidate
           />
+          <label className='search-form__label'>
           <button
             type="submit"
             className="search__button"
-            aria-label="Запустить поиск"
+            disabled={!isValid}
           >
             Найти
           </button>
+          </label>
         </div>
         <FilterCheckbox
-          handleShortFilms={() => setShortMovies(!shortMovies)}
           checkboxName="Короткометражки"
-          shortMovies={shortMovies}
+          onFilterShorts={props.onFilterShorts}
+          isSavedMovies={props.isSavedMovies}
+          isShorts={props.isShorts}
         />
       </form>
     </section>
   );
 }
+
+export default SearchForm;

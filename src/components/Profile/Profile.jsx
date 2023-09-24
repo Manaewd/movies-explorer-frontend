@@ -1,29 +1,16 @@
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-
-// import NavTab from "../Main/NavTab/NavTab";
-// import SideBar from "../Navigation/Navigation";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Validation from "../../hooks/useFormAndValidation";
 
 import "./Profile.css";
 
 function Profile({ onSignOut, onUpdateUser }) {
-  // const [user, setUser] = React.useState({
-  //     name: 'Виталий',
-  //     email: 'pochta@yandex.ru',
-  // });
-
-  // // const handleChange = (e) => {
-  // //     setUser(prevVal => ({
-  // //         ...prevVal,
-  // //         [e.target.name]: e.target.value
-  // //     }));
-
   const currentUser = useContext(CurrentUserContext);
   const { values, isValid, errors, handleChange, setValues } = Validation();
   const [disabled, setDisabled] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
     setIsChanged(
@@ -39,13 +26,19 @@ function Profile({ onSignOut, onUpdateUser }) {
     handleChange(evt);
   }
 
+  if (isSubmit) {
+    return;
+  }
+
   function handleSubmitProfile(evt) {
     evt.preventDefault();
+
+    setIsSubmit(true);
 
     onUpdateUser({ name: values.name, email: values.email });
 
     setTimeout(() => {
-      setDisabled(false);
+      setIsSubmit(false);
     }, 2000);
   }
 
@@ -56,7 +49,6 @@ function Profile({ onSignOut, onUpdateUser }) {
   return (
     <main>
       <section className="profile">
-        {/* <NavTab setIsOpened={setMenuOpened} /> */}
         <div className="profile__content">
           <h1 className="profile__title">{`Привет, ${
             currentUser.name || ""
@@ -79,6 +71,7 @@ function Profile({ onSignOut, onUpdateUser }) {
                   maxLength={30}
                   value={values.name || ""}
                   onChange={handleInputsChange}
+                  disabled={disabled}
                   required
                 />
               </label>
@@ -120,7 +113,6 @@ function Profile({ onSignOut, onUpdateUser }) {
                 Выйти из аккаунта
               </Link>
             </div>
-            {/* <SideBar isOpened={menuOpened} menuClosed={menuClosed} /> */}
           </form>
         </div>
       </section>
