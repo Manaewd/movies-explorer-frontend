@@ -12,7 +12,7 @@
 * CSS
 
 **Установка и запуск проекта:**
-* git clone [https://github.com/NataliaPushkina/movies-explorer-frontend.git](https://github.com/Manaewd/movies-explorer-frontend.git)
+* git clone [https://github.com/Manaewd/movies-explorer-frontend.git]
 * npm install
 * npm start
 
